@@ -1,0 +1,14 @@
+# ninja log v6
+49	242	8102628453725344	meucubo_autogen/timestamp	e880b78c45d7e6ce
+49	242	8102628453725344	meucubo_autogen/mocs_compilation.cpp	e880b78c45d7e6ce
+49	242	8102628453725344	C:/Users/mandr/Faculdade/Cubo-2x2x2/build/meucubo_autogen/timestamp	e880b78c45d7e6ce
+49	242	8102628453725344	C:/Users/mandr/Faculdade/Cubo-2x2x2/build/meucubo_autogen/mocs_compilation.cpp	e880b78c45d7e6ce
+246	333	8102628454293020	CMakeFiles/meucubo.dir/meucubo_autogen/mocs_compilation.cpp.obj	bcb5ff6623f0dd5
+249	7938	8102628454333030	CMakeFiles/meucubo.dir/src/main.cpp.obj	906c761234f479b3
+7941	8126	8102628531252607	meucubo.exe	1361168bb3298288
+37	169	8102637190550624	meucubo_autogen/timestamp	e880b78c45d7e6ce
+37	169	8102637190550624	meucubo_autogen/mocs_compilation.cpp	e880b78c45d7e6ce
+37	169	8102637190550624	C:/Users/mandr/Faculdade/Cubo-2x2x2/build/meucubo_autogen/timestamp	e880b78c45d7e6ce
+37	169	8102637190550624	C:/Users/mandr/Faculdade/Cubo-2x2x2/build/meucubo_autogen/mocs_compilation.cpp	e880b78c45d7e6ce
+172	1545	8102637191888638	CMakeFiles/meucubo.dir/src/main.cpp.obj	906c761234f479b3
+1546	1669	8102637205626587	meucubo.exe	1361168bb3298288
