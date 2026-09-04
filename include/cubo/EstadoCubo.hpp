@@ -15,7 +15,9 @@ enum class Cor : std::uint8_t { Branco, Vermelho, Verde, Amarelo, Laranja, Azul 
 // URF, UFL, ULB, UBR, DFR, DLF, DBL, DRB.
 class EstadoCubo {
 public:
-    using VetorCantos = std::array<std::uint8_t, 8>;
+    // Um cubo 2x2 possui somente 8 peças, todas elas são cantos.
+    // Usamos int para que contas e comparações não precisem de conversões.
+    using VetorCantos = std::array<int, 8>;
 
     EstadoCubo();
     EstadoCubo(VetorCantos permutacao, VetorCantos orientacao);

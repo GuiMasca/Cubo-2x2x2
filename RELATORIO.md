@@ -24,8 +24,8 @@
 
 As posições dos cantos seguem a ordem `URF, UFL, ULB, UBR, DFR, DLF, DBL, DRB`.
 No estado resolvido, a peça de índice `i` está na posição `i`, com orientação
-zero. Essa representação ocupa somente 16 bytes de dados e permite comparação
-e hash eficientes, importantes porque BFS e A* armazenam muitos estados.
+zero. Os vetores têm tamanho fixo e permitem comparação e hash eficientes,
+importantes porque BFS e A* armazenam muitos estados.
 
 Um estado válido contém cada uma das oito peças exatamente uma vez, orientações
 entre 0 e 2 e soma das orientações divisível por 3. Os giros são implementados
