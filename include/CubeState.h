@@ -6,121 +6,79 @@
 #include <algorithm>
 
 struct CubeState {
-    // 24 adesivos: 6 faces com 4 adesivos cada
-    // 0 = Top (U), 1 = Bottom (D), 2 = Front (F), 3 = Back (B), 4 = Left (L), 5 = Right (R)
-    std::vector<int> faces;
+    // 8 quinas, cada uma com 3 cores (U/D, F/B, L/R)
+    // Inicialmente no estado resolvido
+    std::vector<std::vector<int>> cornerColors;
     std::vector<std::string> path;
 
     CubeState() {
-        faces.resize(24);
-        for (int i = 0; i < 24; ++i) {
-            faces[i] = i / 4; 
-        }
+        // 8 quinas do 2x2x2 com suas cores iniciais padrão
+        cornerColors = {
+            {0, 2, 4}, // 0: UFL (Branco, Vermelho, Verde)
+            {0, 2, 5}, // 1: UFR (Branco, Vermelho, Azul)
+            {0, 3, 4}, // 2: UBL (Branco, Laranja, Verde)
+            {0, 3, 5}, // 3: UBR (Branco, Laranja, Azul)
+            {1, 2, 4}, // 4: DFL (Amarelo, Vermelho, Verde)
+            {1, 2, 5}, // 5: DFR (Amarelo, Vermelho, Azul)
+            {1, 3, 4}, // 6: DBL (Amarelo, Laranja, Verde)
+            {1, 3, 5}  // 7: DBR (Amarelo, Laranja, Azul)
+        };
     }
 
     bool isGoal() const {
-        for (int i = 0; i < 24; i += 4) {
-            for (int j = 1; j < 4; ++j) {
-                if (faces[i + j] != faces[i]) return false;
-            }
-        }
-        return true;
+        // Verifica se cada quina está na sua cor base correta
+        std::vector<std::vector<int>> solved = {
+            {0, 2, 4}, {0, 2, 5}, {0, 3, 4}, {0, 3, 5},
+            {1, 2, 4}, {1, 2, 5}, {1, 3, 4}, {1, 3, 5}
+        };
+        return cornerColors == solved;
     }
 
-    void rotateFaceClockwise(int f) {
-        int base = f * 4;
-        int temp = faces[base + 0];
-        faces[base + 0] = faces[base + 2];
-        faces[base + 2] = faces[base + 3];
-        faces[base + 3] = faces[base + 1];
-        faces[base + 1] = temp;
-    }
-
-    void rotateFaceCounterClockwise(int f) {
-        rotateFaceClockwise(f);
-        rotateFaceClockwise(f);
-        rotateFaceClockwise(f);
-    }
-
-    // Movimento U (Topo)
+    // Movimento U (Topo - Gira as quinas 0, 1, 3, 2 no sentido horário)
     CubeState moveU() const {
         CubeState next = *this;
         next.path.push_back("U");
-        next.rotateFaceClockwise(0);
-
-        int t0 = next.faces[8];
-        int t1 = next.faces[9];
-
-        next.faces[8] = next.faces[16];
-        next.faces[9] = next.faces[17];
-
-        next.faces[16] = next.faces[12];
-        next.faces[17] = next.faces[13];
-
-        next.faces[12] = next.faces[20];
-        next.faces[13] = next.faces[21];
-
-        next.faces[20] = t0;
-        next.faces[21] = t1;
+        
+        // Permutação das quinas do topo
+        std::vector<int> temp = next.cornerColors[0];
+        next.cornerColors[0] = next.cornerColors[2];
+        next.cornerColors[2] = next.cornerColors[3];
+        next.cornerColors[3] = next.cornerColors[1];
+        next.cornerColors[1] = temp;
 
         return next;
     }
 
-    // Movimento R (Direita)
+    // Movimento R (Direita - Gira as quinas 1, 5, 7, 3)
     CubeState moveR() const {
         CubeState next = *this;
         next.path.push_back("R");
-        next.rotateFaceClockwise(5);
-
-        int t0 = next.faces[2];
-        int t1 = next.faces[3];
-
-        next.faces[2] = next.faces[10];
-        next.faces[3] = next.faces[11];
-
-        next.faces[10] = next.faces[6];
-        next.faces[11] = next.faces[7];
-
-        next.faces[6] = next.faces[14];
-        next.faces[7] = next.faces[15];
-
-        next.faces[14] = t0;
-        next.faces[15] = t1;
+        
+        std::vector<int> temp = next.cornerColors[1];
+        next.cornerColors[1] = next.cornerColors[3];
+        next.cornerColors[3] = next.cornerColors[7];
+        next.cornerColors[7] = next.cornerColors[5];
+        next.cornerColors[5] = temp;
 
         return next;
     }
 
-    // Movimento F (Frente)
+    // Movimento F (Frente - Gira as quinas 0, 1, 5, 4)
     CubeState moveF() const {
         CubeState next = *this;
         next.path.push_back("F");
-        next.rotateFaceClockwise(2);
-
-        int t0 = next.faces[2];
-        int t1 = next.faces[3];
-
-        next.faces[2] = next.faces[19];
-        next.faces[3] = next.faces[17];
-
-        next.faces[17] = next.faces[5];
-        next.faces[19] = next.faces[4];
-
-        next.faces[5] = next.faces[12];
-        next.faces[4] = next.faces[14];
-
-        next.faces[12] = t0;
-        next.faces[14] = t1;
+        
+        std::vector<int> temp = next.cornerColors[0];
+        next.cornerColors[0] = next.cornerColors[4];
+        next.cornerColors[4] = next.cornerColors[5];
+        next.cornerColors[5] = next.cornerColors[1];
+        next.cornerColors[1] = temp;
 
         return next;
     }
 
-    // Função Sucessora gerando todos os movimentos básicos (U, R, F e inversos)
     std::vector<CubeState> getSuccessors() const {
-        std::vector<CubeState> successors;
-        successors.push_back(this->moveU());
-        successors.push_back(this->moveR());
-        successors.push_back(this->moveF());
-        return successors;
+        return {this->moveU(), this->moveR(), this->moveF()};
     }
 };
 
