@@ -7,6 +7,7 @@
 #include <QOpenGLShaderProgram>
 #include <QMatrix4x4>
 #include <QMouseEvent>
+#include <QKeyEvent>
 #include <iostream>
 #include "CubeState.h"
 
@@ -74,7 +75,7 @@ protected:
 
         m_vbo.create();
         m_vbo.bind();
-        m_vbo.allocate(36 * 6 * sizeof(float)); // Aloca o espaço para os vértices dinâmicos
+        m_vbo.allocate(36 * 6 * sizeof(float));
 
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
@@ -90,7 +91,6 @@ protected:
         glViewport(0, 0, largura, altura);
     }
 
-    // Eventos de clique e arraste do mouse para rotacionar o cubo 3D
     void mousePressEvent(QMouseEvent *event) override
     {
         ultimaPosicaoMouse = event->pos();
@@ -104,13 +104,34 @@ protected:
         if (event->buttons() & Qt::LeftButton) {
             rotacaoX += dy * 0.5f;
             rotacaoY += dx * 0.5f;
-            update(); // Solicita o redesenho da tela
+            update();
         }
 
         ultimaPosicaoMouse = event->pos();
     }
 
-    void paintGL() override
+    // Controles por teclado para girar as faces do cubo
+    // Controles por teclado para girar as faces do cubo interativamente
+    void keyPressEvent(QKeyEvent *event) override
+    {
+        if (event->key() == Qt::Key_R) {
+            meuCubo = meuCubo.moveR();
+            std::cout << "Movimento R executado!" << std::endl;
+        } 
+        else if (event->key() == Qt::Key_U) {
+            meuCubo = meuCubo.moveU();
+            std::cout << "Movimento U executado!" << std::endl;
+        }
+        else if (event->key() == Qt::Key_F) {
+            meuCubo = meuCubo.moveF();
+            std::cout << "Movimento F executado!" << std::endl;
+        }
+        // Você pode adicionar mais teclas aqui conforme implementar os outros movimentos no CubeState.h
+        
+        update(); // Solicita o redesenho imediato da tela com as novas cores atualizadas
+    }
+
+void paintGL() override
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -125,13 +146,20 @@ protected:
         m_program->bind();
         m_vao.bind();
 
-        float cWhite[3]  = {0.95f, 0.95f, 0.95f};
-        float cYellow[3] = {0.95f, 0.85f, 0.10f};
-        float cRed[3]    = {0.90f, 0.10f, 0.10f};
-        float cOrange[3] = {0.95f, 0.50f, 0.10f};
-        float cBlue[3]   = {0.10f, 0.30f, 0.90f};
-        float cGreen[3]  = {0.10f, 0.80f, 0.10f};
-        float cBlack[3]  = {0.05f, 0.05f, 0.05f};
+        float corPaleta[6][3] = {
+            {0.95f, 0.95f, 0.95f}, // 0: Branco (U)
+            {0.95f, 0.85f, 0.10f}, // 1: Amarelo (D)
+            {0.90f, 0.10f, 0.10f}, // 2: Vermelho (F)
+            {0.95f, 0.50f, 0.10f}, // 3: Laranja (B)
+            {0.10f, 0.80f, 0.10f}, // 4: Verde (L)
+            {0.10f, 0.30f, 0.90f}  // 5: Azul (R)
+        };
+        float cBlack[3] = {0.05f, 0.05f, 0.05f};
+
+        int cornerMapping[2][2][2] = {
+            { {2, 0}, {6, 4} }, // x = -1 (L): [y=-1/1][z=-1/1]
+            { {3, 1}, {7, 5} }  // x =  1 (R): [y=-1/1][z=-1/1]
+        };
 
         for (int x = -1; x <= 1; x += 2) {
             for (int y = -1; y <= 1; y += 2) {
@@ -143,12 +171,19 @@ protected:
 
                     float s = 0.46f;
                     
-                    const float* colF = (z == 1)  ? cRed : cBlack;
-                    const float* colB = (z == -1) ? cOrange : cBlack;
-                    const float* colU = (y == 1)  ? cWhite : cBlack;
-                    const float* colD = (y == -1) ? cYellow : cBlack;
-                    const float* colR = (x == 1)  ? cBlue : cBlack;
-                    const float* colL = (x == -1) ? cGreen : cBlack;
+                    int xi = (x < 0) ? 0 : 1;
+                    int yi = (y < 0) ? 0 : 1;
+                    int zi = (z < 0) ? 0 : 1;
+                    int cornerIdx = cornerMapping[xi][yi][zi];
+
+                    const auto& qColors = meuCubo.cornerColors[cornerIdx];
+
+                    const float* colU = (y == 1)  ? corPaleta[qColors[0]] : cBlack;
+                    const float* colD = (y == -1) ? corPaleta[qColors[0]] : cBlack;
+                    const float* colF = (z == 1)  ? corPaleta[qColors[1]] : cBlack;
+                    const float* colB = (z == -1) ? corPaleta[qColors[1]] : cBlack;
+                    const float* colL = (x == -1) ? corPaleta[qColors[2]] : cBlack;
+                    const float* colR = (x == 1)  ? corPaleta[qColors[2]] : cBlack;
 
                     GLfloat miniVertices[] = {
                         // Frente
@@ -212,7 +247,7 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     CuboWidget janela;
-    janela.setWindowTitle("Cubo Mágico 2x2x2 - 3D Interativo com Mouse");
+    janela.setWindowTitle("Cubo Mágico 2x2x2 - Jogável (Teclas R, U, F)");
     janela.resize(900, 700);
     janela.show();
     return app.exec();
