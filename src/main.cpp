@@ -8,6 +8,11 @@
 #include <QMatrix4x4>
 #include <QMouseEvent>
 #include <QKeyEvent>
+#include <QWidget>
+#include <QPushButton>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QStackedWidget>
 #include <iostream>
 #include "CubeState.h"
 
@@ -277,12 +282,188 @@ void paintGL() override
     }
 };
 
+class JanelaPrincipal : public QWidget
+{
+public:
+    JanelaPrincipal(QWidget *parent = nullptr)
+        : QWidget(parent)
+    {
+        setWindowTitle("Cubo Mágico 2x2x2");
+        resize(900, 700);
+
+        // Permite trocar entre diferentes "telas"
+        telas = new QStackedWidget(this);
+
+        criarMenuPrincipal();
+        criarTelaJogo();
+        criarMenuBuscas();
+
+        // Layout principal da janela
+        QVBoxLayout *layoutPrincipal = new QVBoxLayout(this);
+        layoutPrincipal->addWidget(telas);
+
+        // Começa mostrando o menu
+        telas->setCurrentWidget(menuPrincipal);
+    }
+
+private:
+    QStackedWidget *telas;
+
+    QWidget *menuPrincipal;
+    QWidget *telaJogo;
+    QWidget *menuBuscas;
+
+    CuboWidget *cubo;
+
+    void criarMenuPrincipal()
+    {
+        menuPrincipal = new QWidget();
+
+        QVBoxLayout *layout = new QVBoxLayout(menuPrincipal);
+
+        QLabel *titulo = new QLabel("CUBO MÁGICO 2x2x2");
+        titulo->setAlignment(Qt::AlignCenter);
+
+        QPushButton *botaoJogar =
+            new QPushButton("JOGAR");
+
+        QPushButton *botaoBuscas =
+            new QPushButton("BUSCAS");
+
+        layout->addStretch();
+
+        layout->addWidget(titulo);
+
+        layout->addSpacing(50);
+
+        layout->addWidget(botaoJogar);
+        layout->addWidget(botaoBuscas);
+
+        layout->addStretch();
+
+        telas->addWidget(menuPrincipal);
+
+        // JOGAR
+        connect(
+            botaoJogar,
+            &QPushButton::clicked,
+            this,
+            [this]()
+            {
+                telas->setCurrentWidget(telaJogo);
+                cubo->setFocus();
+            }
+        );
+
+        // BUSCAS
+        connect(
+            botaoBuscas,
+            &QPushButton::clicked,
+            this,
+            [this]()
+            {
+                telas->setCurrentWidget(menuBuscas);
+            }
+        );
+    }
+
+    void criarTelaJogo()
+    {
+        telaJogo = new QWidget();
+
+        QVBoxLayout *layout =
+            new QVBoxLayout(telaJogo);
+
+        cubo = new CuboWidget();
+
+        // Importante para R, U e F continuarem funcionando
+        cubo->setFocusPolicy(Qt::StrongFocus);
+
+        QPushButton *botaoVoltar =
+            new QPushButton("Voltar");
+
+        layout->addWidget(cubo, 1);
+        layout->addWidget(botaoVoltar);
+
+        telas->addWidget(telaJogo);
+
+        connect(
+            botaoVoltar,
+            &QPushButton::clicked,
+            this,
+            [this]()
+            {
+                telas->setCurrentWidget(menuPrincipal);
+            }
+        );
+    }
+
+    void criarMenuBuscas()
+    {
+        menuBuscas = new QWidget();
+
+        QVBoxLayout *layout =
+            new QVBoxLayout(menuBuscas);
+
+        QLabel *titulo =
+            new QLabel("ESCOLHA UMA BUSCA");
+
+        titulo->setAlignment(Qt::AlignCenter);
+
+        QPushButton *busca1 =
+            new QPushButton("Busca por largura");
+
+        QPushButton *busca2 =
+            new QPushButton("Busca por profundidade");
+
+        QPushButton *busca3 =
+            new QPushButton("Busca por estrela");
+
+        QPushButton *comparacao =
+            new QPushButton("Comparação");
+
+        QPushButton *voltar =
+            new QPushButton("Voltar");
+
+        layout->addStretch();
+
+        layout->addWidget(titulo);
+
+        layout->addSpacing(40);
+
+        layout->addWidget(busca1);
+        layout->addWidget(busca2);
+        layout->addWidget(busca3);
+
+        layout->addSpacing(20);
+
+        layout->addWidget(comparacao);
+
+        layout->addStretch();
+
+        layout->addWidget(voltar);
+
+        telas->addWidget(menuBuscas);
+
+        connect(
+            voltar,
+            &QPushButton::clicked,
+            this,
+            [this]()
+            {
+                telas->setCurrentWidget(menuPrincipal);
+            }
+        );
+    }
+};
+
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    CuboWidget janela;
-    janela.setWindowTitle("Cubo Mágico 2x2x2 - Jogável (Teclas U, B, F, A, R, L)");
-    janela.resize(900, 700);
+
+    JanelaPrincipal janela;
+
     janela.show();
+
     return app.exec();
 }

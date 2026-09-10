@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 moc:de9d1516e1e3a410b6faef666214fc087e7dc16a007b65570d08ffdb48934c42
+=======
+moc:00a5df0dff2941e5f7808a83e3cfc10fd5e171724625be74c862a8c0216b19e2
+>>>>>>> origin/Gui

@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 C:/Users/julia/OneDrive/Documentos/Cubo-2x2x2/build/CMakeFiles/meucubo.dir
 C:/Users/julia/OneDrive/Documentos/Cubo-2x2x2/build/CMakeFiles/edit_cache.dir
 C:/Users/julia/OneDrive/Documentos/Cubo-2x2x2/build/CMakeFiles/rebuild_cache.dir
 C:/Users/julia/OneDrive/Documentos/Cubo-2x2x2/build/CMakeFiles/meucubo_autogen_timestamp_deps.dir
 C:/Users/julia/OneDrive/Documentos/Cubo-2x2x2/build/CMakeFiles/meucubo_autogen.dir
+=======
+/home/guimasca/Documents/Projeto_Cubo/Cubo-2x2x2/build/CMakeFiles/meucubo.dir
+/home/guimasca/Documents/Projeto_Cubo/Cubo-2x2x2/build/CMakeFiles/edit_cache.dir
+/home/guimasca/Documents/Projeto_Cubo/Cubo-2x2x2/build/CMakeFiles/rebuild_cache.dir
+/home/guimasca/Documents/Projeto_Cubo/Cubo-2x2x2/build/CMakeFiles/meucubo_autogen_timestamp_deps.dir
+/home/guimasca/Documents/Projeto_Cubo/Cubo-2x2x2/build/CMakeFiles/meucubo_autogen.dir
+>>>>>>> origin/Gui
