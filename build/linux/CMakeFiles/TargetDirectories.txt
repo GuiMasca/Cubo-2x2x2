@@ -1,0 +1,5 @@
+/home/guimasca/Documents/Projeto_Cubo/Cubo-2x2x2/build/linux/CMakeFiles/meucubo.dir
+/home/guimasca/Documents/Projeto_Cubo/Cubo-2x2x2/build/linux/CMakeFiles/edit_cache.dir
+/home/guimasca/Documents/Projeto_Cubo/Cubo-2x2x2/build/linux/CMakeFiles/rebuild_cache.dir
+/home/guimasca/Documents/Projeto_Cubo/Cubo-2x2x2/build/linux/CMakeFiles/meucubo_autogen_timestamp_deps.dir
+/home/guimasca/Documents/Projeto_Cubo/Cubo-2x2x2/build/linux/CMakeFiles/meucubo_autogen.dir
