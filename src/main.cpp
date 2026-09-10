@@ -157,8 +157,8 @@ void paintGL() override
         float cBlack[3] = {0.05f, 0.05f, 0.05f};
 
         int cornerMapping[2][2][2] = {
-            { {2, 0}, {6, 4} }, // x = -1 (L): [y=-1/1][z=-1/1]
-            { {3, 1}, {7, 5} }  // x =  1 (R): [y=-1/1][z=-1/1]
+            { {6, 4}, {2, 0} }, // x = -1 (L): baixo primeiro, cima depois
+            { {7, 5}, {3, 1} }  // x =  1 (R): baixo primeiro, cima depois
         };
 
         for (int x = -1; x <= 1; x += 2) {
