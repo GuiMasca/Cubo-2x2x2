@@ -46,6 +46,12 @@ struct CubeState {
         next.cornerColors[3] = next.cornerColors[1];
         next.cornerColors[1] = temp;
 
+        for (int i : {0, 1, 2, 3}) {
+            std::swap(
+                next.cornerColors[i][1],
+                next.cornerColors[i][2]
+            );
+        }
         return next;
     }
 
@@ -55,27 +61,46 @@ struct CubeState {
         next.path.push_back("R");
         
         std::vector<int> temp = next.cornerColors[1];
-        next.cornerColors[1] = next.cornerColors[3];
-        next.cornerColors[3] = next.cornerColors[7];
-        next.cornerColors[7] = next.cornerColors[5];
-        next.cornerColors[5] = temp;
+        next.cornerColors[1] = next.cornerColors[5];
+        next.cornerColors[5] = next.cornerColors[7];
+        next.cornerColors[7] = next.cornerColors[3];
+        next.cornerColors[3] = temp;
+
+            // Corrige orientação
+        for (int i : {1, 5, 7, 3}) {
+            std::swap(
+                next.cornerColors[i][0],
+                next.cornerColors[i][1]
+            );
+        }
 
         return next;
     }
 
-    // Movimento F (Frente - Gira as quinas 0, 1, 5, 4)
-    CubeState moveF() const {
-        CubeState next = *this;
-        next.path.push_back("F");
-        
-        std::vector<int> temp = next.cornerColors[0];
-        next.cornerColors[0] = next.cornerColors[4];
-        next.cornerColors[4] = next.cornerColors[5];
-        next.cornerColors[5] = next.cornerColors[1];
-        next.cornerColors[1] = temp;
+   CubeState moveF() const {
+    CubeState next = *this;
+    next.path.push_back("F");
 
-        return next;
+    // Guarda o estado antes do movimento
+    auto old = cornerColors;
+
+    // Rotação das posições das 4 quinas da frente
+    next.cornerColors[1] = old[0]; // UFL -> UFR
+    next.cornerColors[5] = old[1]; // UFR -> DFR
+    next.cornerColors[4] = old[5]; // DFR -> DFL
+    next.cornerColors[0] = old[4]; // DFL -> UFL
+
+    // Ao girar a frente, os eixos CIMA/BAIXO e
+    // ESQUERDA/DIREITA trocam de orientação.
+    for (int i : {0, 1, 4, 5}) {
+        std::swap(
+            next.cornerColors[i][0],
+            next.cornerColors[i][2]
+        );
     }
+
+    return next;
+}
 
     std::vector<CubeState> getSuccessors() const {
         return {this->moveU(), this->moveR(), this->moveF()};
