@@ -110,7 +110,6 @@ protected:
         ultimaPosicaoMouse = event->pos();
     }
 
-    // Controles por teclado para girar as faces do cubo
     // Controles por teclado para girar as faces do cubo interativamente
     void keyPressEvent(QKeyEvent *event) override
     {
@@ -126,7 +125,34 @@ protected:
             meuCubo = meuCubo.moveF();
             std::cout << "Movimento F executado!" << std::endl;
         }
-        // Você pode adicionar mais teclas aqui conforme implementar os outros movimentos no CubeState.h
+        else if (event->key() == Qt::Key_L) {
+            meuCubo = meuCubo.moveL();
+            std::cout << "Movimento L executado!" << std::endl;
+        }
+        else if (event->key() == Qt::Key_A) {
+            meuCubo = meuCubo.moveA();
+            std::cout << "Movimento A executado!" << std::endl;
+        }
+        else if (event->key() == Qt::Key_B) {
+            meuCubo = meuCubo.moveB();
+            std::cout << "Movimento B executado!" << std::endl;
+        }
+        else if (event->key() == Qt::Key_N) {
+            meuCubo = meuCubo.moveN();
+            std::cout << "Movimento de baixo anti-horario (N) executado!" << std::endl;
+        }
+        else if (event->key() == Qt::Key_I) {
+            meuCubo = meuCubo.moveI();
+            std::cout << "Movimento de cima anti-horario (I) executado!" << std::endl;
+        }
+        else if (event->key() == Qt::Key_K) {
+            meuCubo = meuCubo.moveK();
+            std::cout << "Movimento da esquerda anti-horario (K) executado!" << std::endl;
+        }
+        else if (event->key() == Qt::Key_S) {
+            meuCubo = meuCubo.moveS();
+            std::cout << "Movimento de tras anti-horario (S) executado!" << std::endl;
+        }
         
         update(); // Solicita o redesenho imediato da tela com as novas cores atualizadas
     }
@@ -247,7 +273,7 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     CuboWidget janela;
-    janela.setWindowTitle("Cubo Mágico 2x2x2 - Jogável (Teclas R, U, F)");
+    janela.setWindowTitle("Cubo Mágico 2x2x2 - Jogável (Teclas U, B, F, A, R, L)");
     janela.resize(900, 700);
     janela.show();
     return app.exec();

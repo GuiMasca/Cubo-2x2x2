@@ -34,17 +34,17 @@ struct CubeState {
         return cornerColors == solved;
     }
 
-    // Movimento U (Topo - Gira as quinas 0, 1, 3, 2 no sentido horário)
+    // Movimento de cima horário (U) (Topo - Gira as quinas 0, 1, 3, 2)
     CubeState moveU() const {
         CubeState next = *this;
         next.path.push_back("U");
         
         // Permutação das quinas do topo
         std::vector<int> temp = next.cornerColors[0];
-        next.cornerColors[0] = next.cornerColors[2];
-        next.cornerColors[2] = next.cornerColors[3];
-        next.cornerColors[3] = next.cornerColors[1];
-        next.cornerColors[1] = temp;
+        next.cornerColors[0] = next.cornerColors[1];
+        next.cornerColors[1] = next.cornerColors[3];
+        next.cornerColors[3] = next.cornerColors[2];
+        next.cornerColors[2] = temp;
 
         for (int i : {0, 1, 2, 3}) {
             std::swap(
@@ -55,7 +55,32 @@ struct CubeState {
         return next;
     }
 
-    // Movimento R (Direita - Gira as quinas 1, 5, 7, 3)
+    //movimento de baixo horário (B)
+    CubeState moveB() const {
+    CubeState next = *this;
+    next.path.push_back("B");
+
+    auto old = cornerColors;
+
+    // Bottom horário olhando diretamente para a face de baixo
+    std::vector<int> temp = next.cornerColors[4];
+    next.cornerColors[4] = next.cornerColors[6];
+    next.cornerColors[6] = next.cornerColors[7];
+    next.cornerColors[7] = next.cornerColors[5];
+    next.cornerColors[5] = temp;
+
+    // Frente/Trás <-> Esquerda/Direita
+    for (int i : {4, 5, 6, 7}) {
+        std::swap(
+            next.cornerColors[i][1],
+            next.cornerColors[i][2]
+        );
+    }
+
+    return next;
+    }
+
+    // Movimento R (Direita - Gira as quinas 1, 5, 7, 3) HORARIO
     CubeState moveR() const {
         CubeState next = *this;
         next.path.push_back("R");
@@ -77,6 +102,7 @@ struct CubeState {
         return next;
     }
 
+    //movimento da frente no sentido horário (F)
    CubeState moveF() const {
     CubeState next = *this;
     next.path.push_back("F");
@@ -101,6 +127,154 @@ struct CubeState {
 
     return next;
 }
+    //movimento da esquerda no sentido horário (L)
+    CubeState moveL() const {
+        CubeState next = *this;
+        next.path.push_back("L");
+
+        auto old = cornerColors;
+
+        // L horário olhando diretamente para a face esquerda
+        std::vector<int> temp = next.cornerColors[0];
+        next.cornerColors[0] = next.cornerColors[2];
+        next.cornerColors[2] = next.cornerColors[6];
+        next.cornerColors[6] = next.cornerColors[4];
+        next.cornerColors[4] = temp;
+
+        // Cima/Baixo <-> Frente/Trás
+        for (int i : {0, 2, 4, 6}) {
+            std::swap(
+                next.cornerColors[i][0],
+                next.cornerColors[i][1]
+            );
+        }
+
+        return next;
+    }
+
+    //movimento atrás horário (A)
+    CubeState moveA() const {
+        CubeState next = *this;
+        next.path.push_back("A");
+
+        auto old = cornerColors;
+
+        // Atrás horário olhando diretamente para a face traseira
+        std::vector<int> temp = next.cornerColors[2];
+        next.cornerColors[2] = next.cornerColors[3];
+        next.cornerColors[3] = next.cornerColors[7];
+        next.cornerColors[7] = next.cornerColors[6];
+        next.cornerColors[6] = temp;
+
+        // Cima/Baixo <-> Esquerda/Direita
+        for (int i : {2, 3, 6, 7}) {
+            std::swap(
+                next.cornerColors[i][0],
+                next.cornerColors[i][2]
+            );
+        }
+
+        return next;
+    }
+
+    //AQUI OS MOVIMENTOS ANTI-HORARIO
+
+    //movimento de baixo anti-horário (N)
+    CubeState moveN() const {
+    CubeState next = *this;
+    next.path.push_back("N");
+
+    auto old = cornerColors;
+
+    // Bottom horário olhando diretamente para a face de baixo
+    next.cornerColors[6] = old[4]; // DFL -> DBL
+    next.cornerColors[7] = old[6]; // DBL -> DBR
+    next.cornerColors[5] = old[7]; // DBR -> DFR
+    next.cornerColors[4] = old[5]; // DFR -> DFL
+
+    // Frente/Trás <-> Esquerda/Direita
+    for (int i : {4, 5, 6, 7}) {
+        std::swap(
+            next.cornerColors[i][1],
+            next.cornerColors[i][2]
+        );
+    }
+
+    return next;
+    }
+    
+    // Movimento de cima anti-horário (I) (Topo - Gira as quinas 0, 1, 3, 2)
+    CubeState moveI() const {
+        CubeState next = *this;
+        next.path.push_back("I");
+        
+        // Permutação das quinas do topo
+        std::vector<int> temp = next.cornerColors[0];
+        next.cornerColors[0] = next.cornerColors[2];
+        next.cornerColors[2] = next.cornerColors[3];
+        next.cornerColors[3] = next.cornerColors[1];
+        next.cornerColors[1] = temp;
+
+        for (int i : {0, 1, 2, 3}) {
+            std::swap(
+                next.cornerColors[i][1],
+                next.cornerColors[i][2]
+            );
+        }
+        return next;
+    }
+
+    //movimento da esquerda no sentido anti-horário (K)
+    CubeState moveK() const {
+        CubeState next = *this;
+        next.path.push_back("K");
+
+        auto old = cornerColors;
+
+        // L anti-horário olhando diretamente para a face esquerda
+        std::vector<int> temp = next.cornerColors[0];
+        next.cornerColors[0] = next.cornerColors[4];
+        next.cornerColors[4] = next.cornerColors[6];
+        next.cornerColors[6] = next.cornerColors[2];
+        next.cornerColors[2] = temp;
+
+        // Cima/Baixo <-> Frente/Trás
+        for (int i : {0, 2, 4, 6}) {
+            std::swap(
+                next.cornerColors[i][0],
+                next.cornerColors[i][1]
+            );
+        }
+
+        return next;
+    }
+
+    //movimento atrás anti-horário (S)
+    CubeState moveS() const {
+        CubeState next = *this;
+        next.path.push_back("S");
+
+        auto old = cornerColors;
+
+        // Atrás anti-horário olhando diretamente para a face traseira
+        std::vector<int> temp = next.cornerColors[2];
+        next.cornerColors[2] = next.cornerColors[6];
+        next.cornerColors[6] = next.cornerColors[7];
+        next.cornerColors[7] = next.cornerColors[3];
+        next.cornerColors[3] = temp;
+
+        // Cima/Baixo <-> Esquerda/Direita
+        for (int i : {2, 3, 6, 7}) {
+            std::swap(
+                next.cornerColors[i][0],
+                next.cornerColors[i][2]
+            );
+        }
+
+        return next;
+    }
+
+
 
     std::vector<CubeState> getSuccessors() const {
         return {this->moveU(), this->moveR(), this->moveF()};
