@@ -1,0 +1,155 @@
+
+---
+events:
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineSystem.cmake:12 (find_program)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_UNAME"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "uname"
+    candidate_directories:
+      - "/home/guimasca/.local/share/mise/installs/node/26.5.0/bin/"
+      - "/home/guimasca/.local/share/omarchy/bin/"
+      - "/home/guimasca/.config/Code/User/globalStorage/github.copilot-chat/debugCommand/"
+      - "/home/guimasca/.config/Code/User/globalStorage/github.copilot-chat/copilotCli/"
+      - "/home/guimasca/.local/share/mise/shims/"
+      - "/usr/local/sbin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+      - "/home/guimasca/.local/bin/"
+      - "/bin/"
+    searched_directories:
+      - "/home/guimasca/.local/share/mise/installs/node/26.5.0/bin/uname"
+      - "/home/guimasca/.local/share/omarchy/bin/uname"
+      - "/home/guimasca/.config/Code/User/globalStorage/github.copilot-chat/debugCommand/uname"
+      - "/home/guimasca/.config/Code/User/globalStorage/github.copilot-chat/copilotCli/uname"
+      - "/home/guimasca/.local/share/mise/shims/uname"
+      - "/usr/local/sbin/uname"
+      - "/usr/local/bin/uname"
+    found: "/usr/bin/uname"
+    search_context:
+      ENV{PATH}:
+        - "/home/guimasca/.local/share/mise/installs/node/26.5.0/bin"
+        - "/home/guimasca/.local/share/omarchy/bin"
+        - "/home/guimasca/.config/Code/User/globalStorage/github.copilot-chat/debugCommand"
+        - "/home/guimasca/.config/Code/User/globalStorage/github.copilot-chat/copilotCli"
+        - "/home/guimasca/.local/share/mise/shims"
+        - "/home/guimasca/.local/share/omarchy/bin"
+        - "/usr/local/sbin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+        - "/home/guimasca/.local/bin"
+        - "/home/guimasca/.local/bin"
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineSystem.cmake:218 (message)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      The system is: Linux - 7.1.8-arch1-3 - x86_64
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeNinjaFindMake.cmake:5 (find_program)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_MAKE_PROGRAM"
+    description: "Program used to build from build.ninja files."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "ninja-build"
+      - "ninja"
+      - "samu"
+    candidate_directories:
+      - "/home/guimasca/.local/share/mise/installs/node/26.5.0/bin/"
+      - "/home/guimasca/.local/share/omarchy/bin/"
+      - "/home/guimasca/.config/Code/User/globalStorage/github.copilot-chat/debugCommand/"
+      - "/home/guimasca/.config/Code/User/globalStorage/github.copilot-chat/copilotCli/"
+      - "/home/guimasca/.local/share/mise/shims/"
+      - "/usr/local/sbin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+      - "/home/guimasca/.local/bin/"
+    searched_directories:
+      - "/home/guimasca/.local/share/mise/installs/node/26.5.0/bin/ninja-build"
+      - "/home/guimasca/.local/share/mise/installs/node/26.5.0/bin/ninja"
+      - "/home/guimasca/.local/share/mise/installs/node/26.5.0/bin/samu"
+      - "/home/guimasca/.local/share/omarchy/bin/ninja-build"
+      - "/home/guimasca/.local/share/omarchy/bin/ninja"
+      - "/home/guimasca/.local/share/omarchy/bin/samu"
+      - "/home/guimasca/.config/Code/User/globalStorage/github.copilot-chat/debugCommand/ninja-build"
+      - "/home/guimasca/.config/Code/User/globalStorage/github.copilot-chat/debugCommand/ninja"
+      - "/home/guimasca/.config/Code/User/globalStorage/github.copilot-chat/debugCommand/samu"
+      - "/home/guimasca/.config/Code/User/globalStorage/github.copilot-chat/copilotCli/ninja-build"
+      - "/home/guimasca/.config/Code/User/globalStorage/github.copilot-chat/copilotCli/ninja"
+      - "/home/guimasca/.config/Code/User/globalStorage/github.copilot-chat/copilotCli/samu"
+      - "/home/guimasca/.local/share/mise/shims/ninja-build"
+      - "/home/guimasca/.local/share/mise/shims/ninja"
+      - "/home/guimasca/.local/share/mise/shims/samu"
+      - "/usr/local/sbin/ninja-build"
+      - "/usr/local/sbin/ninja"
+      - "/usr/local/sbin/samu"
+      - "/usr/local/bin/ninja-build"
+      - "/usr/local/bin/ninja"
+      - "/usr/local/bin/samu"
+      - "/usr/bin/ninja-build"
+      - "/usr/bin/ninja"
+      - "/usr/bin/samu"
+      - "/usr/bin/site_perl/ninja-build"
+      - "/usr/bin/site_perl/ninja"
+      - "/usr/bin/site_perl/samu"
+      - "/usr/bin/vendor_perl/ninja-build"
+      - "/usr/bin/vendor_perl/ninja"
+      - "/usr/bin/vendor_perl/samu"
+      - "/usr/bin/core_perl/ninja-build"
+      - "/usr/bin/core_perl/ninja"
+      - "/usr/bin/core_perl/samu"
+      - "/home/guimasca/.local/bin/ninja-build"
+      - "/home/guimasca/.local/bin/ninja"
+      - "/home/guimasca/.local/bin/samu"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "/home/guimasca/.local/share/mise/installs/node/26.5.0/bin"
+        - "/home/guimasca/.local/share/omarchy/bin"
+        - "/home/guimasca/.config/Code/User/globalStorage/github.copilot-chat/debugCommand"
+        - "/home/guimasca/.config/Code/User/globalStorage/github.copilot-chat/copilotCli"
+        - "/home/guimasca/.local/share/mise/shims"
+        - "/home/guimasca/.local/share/omarchy/bin"
+        - "/usr/local/sbin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+        - "/home/guimasca/.local/bin"
+        - "/home/guimasca/.local/bin"
+...
