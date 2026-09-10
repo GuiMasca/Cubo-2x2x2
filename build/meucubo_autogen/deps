@@ -1,42 +1,4 @@
 meucubo_autogen/timestamp: \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/CMakeCXXInformation.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/CMakeCommonLanguageInclude.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/CMakeFindDependencyMacro.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/CMakeGenericSystem.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/CMakeInitializeConfigs.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/CMakeLanguageInformation.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/CMakeRCInformation.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/CMakeSystemSpecificInformation.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/CMakeSystemSpecificInitialize.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/CheckCXXCompilerFlag.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/CheckCXXSourceCompiles.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/CheckIncludeFileCXX.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/CheckLibraryExists.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/Compiler/CMakeCommonCompilerMacros.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/Compiler/GNU-CXX.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/Compiler/GNU.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/FindPackageHandleStandardArgs.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/FindPackageMessage.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/FindThreads.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/FindVulkan.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/GNUInstallDirs.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/Internal/CMakeCXXLinkerInformation.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/Internal/CMakeCommonLinkerInformation.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/Internal/CheckCompilerFlag.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/Internal/CheckFlagCommonConfig.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/Internal/CheckSourceCompiles.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/Platform/Linker/GNU.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/Platform/Linker/Windows-CXX.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/Platform/Linker/Windows-GNU-CXX.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/Platform/Linker/Windows-GNU.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/Platform/Windows-GNU-CXX-ABI.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/Platform/Windows-GNU-CXX.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/Platform/Windows-GNU.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/Platform/Windows-Initialize.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/Platform/Windows-windres.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/Platform/Windows.cmake \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/Platform/WindowsPaths.cmake \
 	C:/Qt/6.11.2/mingw_64/lib/cmake/Qt6/FindWrapAtomic.cmake \
 	C:/Qt/6.11.2/mingw_64/lib/cmake/Qt6/FindWrapVulkanHeaders.cmake \
 	C:/Qt/6.11.2/mingw_64/lib/cmake/Qt6/Qt6Config.cmake \
@@ -88,7 +50,6 @@ meucubo_autogen/timestamp: \
 	C:/Qt/6.11.2/mingw_64/lib/cmake/Qt6/QtPublicToolHelpers.cmake \
 	C:/Qt/6.11.2/mingw_64/lib/cmake/Qt6/QtPublicWalkLibsHelpers.cmake \
 	C:/Qt/6.11.2/mingw_64/lib/cmake/Qt6/QtPublicWindowsHelpers.cmake \
-	C:/Qt/6.11.2/mingw_64/lib/cmake/Qt6/qt.toolchain.cmake \
 	C:/Qt/6.11.2/mingw_64/lib/cmake/Qt6Core/Qt6CoreAdditionalTargetInfo.cmake \
 	C:/Qt/6.11.2/mingw_64/lib/cmake/Qt6Core/Qt6CoreConfig.cmake \
 	C:/Qt/6.11.2/mingw_64/lib/cmake/Qt6Core/Qt6CoreConfigExtras.cmake \
@@ -230,10 +191,42 @@ meucubo_autogen/timestamp: \
 	C:/Qt/6.11.2/mingw_64/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsTargets.cmake \
 	C:/Qt/6.11.2/mingw_64/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsTargetsPrecheck.cmake \
 	C:/Qt/6.11.2/mingw_64/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsVersionlessTargets.cmake \
-	C:/Users/mandr/Faculdade/Cubo-2x2x2/CMakeLists.txt \
-	C:/Users/mandr/Faculdade/Cubo-2x2x2/build/CMakeFiles/4.2.3-msvc3/CMakeCXXCompiler.cmake \
-	C:/Users/mandr/Faculdade/Cubo-2x2x2/build/CMakeFiles/4.2.3-msvc3/CMakeRCCompiler.cmake \
-	C:/Users/mandr/Faculdade/Cubo-2x2x2/build/CMakeFiles/4.2.3-msvc3/CMakeSystem.cmake \
-	C:/Users/mandr/Faculdade/Cubo-2x2x2/include/CubeState.h \
-	C:/Users/mandr/Faculdade/Cubo-2x2x2/src/main.cpp \
-	C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeCXXInformation.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeCommonLanguageInclude.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeGenericSystem.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeInitializeConfigs.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeLanguageInformation.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeRCInformation.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeSystemSpecificInformation.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeSystemSpecificInitialize.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CheckCXXCompilerFlag.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CheckCXXSourceCompiles.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CheckIncludeFileCXX.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CheckLibraryExists.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/CMakeCommonCompilerMacros.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/GNU-CXX.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/GNU.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/FindPackageHandleStandardArgs.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/FindPackageMessage.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/FindThreads.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/FindVulkan.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/GNUInstallDirs.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Internal/CheckCompilerFlag.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Internal/CheckFlagCommonConfig.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Internal/CheckSourceCompiles.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-GNU-CXX-ABI.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-GNU-CXX.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-GNU.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-Initialize.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-windres.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows.cmake \
+	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/WindowsPaths.cmake \
+	C:/Users/julia/OneDrive/Documentos/Cubo-2x2x2/CMakeLists.txt \
+	C:/Users/julia/OneDrive/Documentos/Cubo-2x2x2/build/CMakeFiles/3.30.5/CMakeCXXCompiler.cmake \
+	C:/Users/julia/OneDrive/Documentos/Cubo-2x2x2/build/CMakeFiles/3.30.5/CMakeRCCompiler.cmake \
+	C:/Users/julia/OneDrive/Documentos/Cubo-2x2x2/build/CMakeFiles/3.30.5/CMakeSystem.cmake \
+	C:/Users/julia/OneDrive/Documentos/Cubo-2x2x2/include/CubeState.h \
+	C:/Users/julia/OneDrive/Documentos/Cubo-2x2x2/src/main.cpp \
+	C:/Qt/Tools/CMake_64/bin/cmake.exe
