@@ -1,1 +1,0 @@
-/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/meucubo.dir/link.d CMakeFiles/meucubo.dir/meucubo_autogen/mocs_compilation.cpp.o CMakeFiles/meucubo.dir/src/main.cpp.o -o meucubo  /usr/lib/libQt6OpenGLWidgets.so.6.11.2 /usr/lib/libQt6OpenGL.so.6.11.2 /usr/lib/libQt6Widgets.so.6.11.2 /usr/lib/libQt6Gui.so.6.11.2 /usr/lib/libGLX.so /usr/lib/libOpenGL.so /usr/lib/libQt6Core.so.6.11.2
