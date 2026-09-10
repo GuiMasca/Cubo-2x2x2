@@ -274,6 +274,52 @@ struct CubeState {
         return next;
     }
 
+    //movimento da frente no sentido anti-horário (G)
+    CubeState moveG() const {
+    CubeState next = *this;
+    next.path.push_back("G");
+
+    // Guarda o estado antes do movimento
+    auto old = cornerColors;
+
+    // Rotação das posições das 4 quinas da frente
+    std::vector<int> temp = next.cornerColors[0];
+    next.cornerColors[0] = next.cornerColors[1];
+    next.cornerColors[1] = next.cornerColors[5];
+    next.cornerColors[5] = next.cornerColors[4];
+    next.cornerColors[4] = temp;
+
+    // Ao girar a frente, os eixos CIMA/BAIXO e
+    // ESQUERDA/DIREITA trocam de orientação.
+    for (int i : {0, 1, 4, 5}) {
+        std::swap(
+            next.cornerColors[i][0],
+            next.cornerColors[i][2]
+        );
+    }
+
+    return next;
+}
+    CubeState moveT() const {
+        CubeState next = *this;
+        next.path.push_back("T");
+            
+        std::vector<int> temp = next.cornerColors[1];
+        next.cornerColors[1] = next.cornerColors[3];
+        next.cornerColors[3] = next.cornerColors[7];
+        next.cornerColors[7] = next.cornerColors[5];
+        next.cornerColors[5] = temp;
+
+            // Corrige orientação
+        for (int i : {1, 5, 7, 3}) {
+            std::swap(
+                next.cornerColors[i][0],
+                next.cornerColors[i][1]
+            );
+        }
+
+        return next;
+    }
 
 
     std::vector<CubeState> getSuccessors() const {

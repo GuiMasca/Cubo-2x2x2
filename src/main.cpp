@@ -153,6 +153,14 @@ protected:
             meuCubo = meuCubo.moveS();
             std::cout << "Movimento de tras anti-horario (S) executado!" << std::endl;
         }
+        else if (event->key() == Qt::Key_G) {
+            meuCubo = meuCubo.moveG();
+            std::cout << "Movimento da frente anti-horario (G) executado!" << std::endl;
+        }
+        else if (event->key() == Qt::Key_T) {
+            meuCubo = meuCubo.moveT();
+            std::cout << "Movimento da direita anti-horario (T) executado!" << std::endl;
+        }
         
         update(); // Solicita o redesenho imediato da tela com as novas cores atualizadas
     }
