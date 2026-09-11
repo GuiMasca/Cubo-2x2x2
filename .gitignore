@@ -1,1 +1,5 @@
-/build/
+# Build gerado pelo CMake
+build/
+
+# Config de IntelliSense do VSCode (específica de cada máquina)
+.vscode/c_cpp_properties.json
