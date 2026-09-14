@@ -23,7 +23,16 @@ class CuboWidget : public QOpenGLWidget,
 {
 public:
 
+    int getMovimentosJogador() const {
+        return movimentosJogador;
+    }
+
+    void setLabelMovimentos(QLabel* label) {
+    labelMovimentos = label;
+}
+
     void embaralharComSeed(unsigned int seed) {
+        movimentosJogador = 0;
         meuCubo = CubeState(); // Reseta para o estado resolvido
         srand(seed);           // Define a seed desejada
         embaralharCubo(10);    // Executa os 10 movimentos de embaralhamento
@@ -81,6 +90,8 @@ protected:
     float rotacaoX = 30.0f;
     float rotacaoY = -45.0f;
     QPoint ultimaPosicaoMouse;
+    int movimentosJogador = 0;
+    QLabel* labelMovimentos = nullptr;
 
     QOpenGLShaderProgram *m_program;
     QOpenGLBuffer m_vbo;
@@ -163,52 +174,69 @@ protected:
     {
         if (event->key() == Qt::Key_R) {
             meuCubo = meuCubo.moveR();
+            movimentosJogador++;
             std::cout << "Movimento R executado!" << std::endl;
         } 
         else if (event->key() == Qt::Key_U) {
             meuCubo = meuCubo.moveU();
+            movimentosJogador++;
             std::cout << "Movimento U executado!" << std::endl;
         }
         else if (event->key() == Qt::Key_F) {
             meuCubo = meuCubo.moveF();
+            movimentosJogador++;
             std::cout << "Movimento F executado!" << std::endl;
         }
         else if (event->key() == Qt::Key_L) {
             meuCubo = meuCubo.moveL();
+            movimentosJogador++;
             std::cout << "Movimento L executado!" << std::endl;
         }
         else if (event->key() == Qt::Key_A) {
             meuCubo = meuCubo.moveA();
+            movimentosJogador++;
             std::cout << "Movimento A executado!" << std::endl;
         }
         else if (event->key() == Qt::Key_B) {
             meuCubo = meuCubo.moveB();
+            movimentosJogador++;
             std::cout << "Movimento B executado!" << std::endl;
         }
         else if (event->key() == Qt::Key_N) {
             meuCubo = meuCubo.moveN();
+            movimentosJogador++;
             std::cout << "Movimento de baixo anti-horario (N) executado!" << std::endl;
         }
         else if (event->key() == Qt::Key_I) {
             meuCubo = meuCubo.moveI();
+            movimentosJogador++;
             std::cout << "Movimento de cima anti-horario (I) executado!" << std::endl;
         }
         else if (event->key() == Qt::Key_K) {
             meuCubo = meuCubo.moveK();
+            movimentosJogador++;
             std::cout << "Movimento da esquerda anti-horario (K) executado!" << std::endl;
         }
         else if (event->key() == Qt::Key_S) {
             meuCubo = meuCubo.moveS();
+            movimentosJogador++;
             std::cout << "Movimento de tras anti-horario (S) executado!" << std::endl;
         }
         else if (event->key() == Qt::Key_G) {
             meuCubo = meuCubo.moveG();
+            movimentosJogador++;
             std::cout << "Movimento da frente anti-horario (G) executado!" << std::endl;
         }
         else if (event->key() == Qt::Key_T) {
             meuCubo = meuCubo.moveT();
+            movimentosJogador++;
             std::cout << "Movimento da direita anti-horario (T) executado!" << std::endl;
         }
+        if (labelMovimentos) {
+            labelMovimentos->setText(
+            "Movimentos: " + QString::number(movimentosJogador)
+        );
+}
         
         update(); // Solicita o redesenho imediato da tela com as novas cores atualizadas
     }
@@ -421,6 +449,11 @@ private:
         cubo = new CuboWidget();
         cubo->setFocusPolicy(Qt::StrongFocus);
 
+        QLabel *labelMovimentos = new QLabel("Movimentos: 0");
+        labelMovimentos->setAlignment(Qt::AlignCenter);
+
+        cubo->setLabelMovimentos(labelMovimentos);
+
         labelSeedInfo = new QLabel();
         labelSeedInfo->setAlignment(Qt::AlignCenter);
 
@@ -433,6 +466,7 @@ private:
         layout->addWidget(botaoNovaSeed);
         layout->addWidget(botaoRepetirSeed);
         layout->addWidget(botaoVoltar);
+        layout->addWidget(labelMovimentos);
 
         telas->addWidget(telaJogo);
 
