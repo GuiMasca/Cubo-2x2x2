@@ -1,8 +1,0 @@
-# ninja log v6
-55	483	8107691129925553	meucubo_autogen/timestamp	a21b8d6a2db4ee6c
-55	483	8107691129925553	meucubo_autogen/mocs_compilation.cpp	a21b8d6a2db4ee6c
-55	483	8107691129925553	C:/Users/julia/OneDrive/Documentos/Cubo-2x2x2/build/meucubo_autogen/timestamp	a21b8d6a2db4ee6c
-55	483	8107691129925553	C:/Users/julia/OneDrive/Documentos/Cubo-2x2x2/build/meucubo_autogen/mocs_compilation.cpp	a21b8d6a2db4ee6c
-492	1534	8107691131473066	CMakeFiles/meucubo.dir/meucubo_autogen/mocs_compilation.cpp.obj	80f4f226a8cc43cb
-499	2239	8107691131543357	CMakeFiles/meucubo.dir/src/main.cpp.obj	16817161277518c
-2241	2419	8107691148898375	meucubo.exe	75671d8bfcc6af69
