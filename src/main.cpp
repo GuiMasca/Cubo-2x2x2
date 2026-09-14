@@ -14,15 +14,58 @@
 #include <QLabel>
 #include <QStackedWidget>
 #include <iostream>
+#include <cstdlib> 
+#include <ctime>
 #include "CubeState.h"
 
 class CuboWidget : public QOpenGLWidget,
                    protected QOpenGLFunctions
 {
 public:
+
+    void embaralharComSeed(unsigned int seed) {
+        meuCubo = CubeState(); // Reseta para o estado resolvido
+        srand(seed);           // Define a seed desejada
+        embaralharCubo(10);    // Executa os 10 movimentos de embaralhamento
+    }
+
+    void embaralharCubo(int passos = 10) {
+    // Lista de ponteiros para as funções de movimento disponíveis
+    // Utilizando as letras correspondentes aos movimentos do seu CubeState
+    std::vector<std::string> movimentos = {"R", "U", "F", "L", "B", "A", "N", "I", "K", "S", "G", "T"};
+    
+    std::string ultimoMovimento = "";
+    
+    for (int i = 0; i < passos; ++i) {
+        std::string movimentoEscolhido;
+        do {
+            int idx = rand() % movimentos.size();
+            movimentoEscolhido = movimentos[idx];
+        } while (movimentoEscolhido == ultimoMovimento); // Evita repetir o mesmo movimento consecutivamente
+        
+        ultimoMovimento = movimentoEscolhido;
+        
+        // Aplica o movimento correspondente no estado do cubo
+        if (movimentoEscolhido == "R") meuCubo = meuCubo.moveR();
+        else if (movimentoEscolhido == "U") meuCubo = meuCubo.moveU();
+        else if (movimentoEscolhido == "F") meuCubo = meuCubo.moveF();
+        else if (movimentoEscolhido == "L") meuCubo = meuCubo.moveL();
+        else if (movimentoEscolhido == "B") meuCubo = meuCubo.moveB();
+        else if (movimentoEscolhido == "A") meuCubo = meuCubo.moveA();
+        else if (movimentoEscolhido == "N") meuCubo = meuCubo.moveN();
+        else if (movimentoEscolhido == "I") meuCubo = meuCubo.moveI();
+        else if (movimentoEscolhido == "K") meuCubo = meuCubo.moveK();
+        else if (movimentoEscolhido == "S") meuCubo = meuCubo.moveS();
+        else if (movimentoEscolhido == "G") meuCubo = meuCubo.moveG();
+        else if (movimentoEscolhido == "T") meuCubo = meuCubo.moveT();
+    }
+    update(); // Redesenha a tela com o cubo embaralhado
+}
+
     CuboWidget(QWidget *parent = nullptr)
         : QOpenGLWidget(parent), m_program(nullptr), m_vbo(QOpenGLBuffer::VertexBuffer)
     {
+        srand(time(nullptr));
     }
 
     ~CuboWidget()
@@ -367,25 +410,62 @@ private:
         );
     }
 
+    unsigned int seedAtual = 0; // Será inicializada na criação da tela
+    QLabel *labelSeedInfo;
+
     void criarTelaJogo()
     {
         telaJogo = new QWidget();
-
-        QVBoxLayout *layout =
-            new QVBoxLayout(telaJogo);
+        QVBoxLayout *layout = new QVBoxLayout(telaJogo);
 
         cubo = new CuboWidget();
-
-        // Importante para R, U e F continuarem funcionando
         cubo->setFocusPolicy(Qt::StrongFocus);
 
-        QPushButton *botaoVoltar =
-            new QPushButton("Voltar");
+        labelSeedInfo = new QLabel();
+        labelSeedInfo->setAlignment(Qt::AlignCenter);
+
+        QPushButton *botaoNovaSeed = new QPushButton("Gerar Nova Seed (Trocar)");
+        QPushButton *botaoRepetirSeed = new QPushButton("Reiniciar com a Seed Atual");
+        QPushButton *botaoVoltar = new QPushButton("Voltar");
 
         layout->addWidget(cubo, 1);
+        layout->addWidget(labelSeedInfo);
+        layout->addWidget(botaoNovaSeed);
+        layout->addWidget(botaoRepetirSeed);
         layout->addWidget(botaoVoltar);
 
         telas->addWidget(telaJogo);
+
+        // GERA A PRIMEIRA SEED AUTOMATICAMENTE AO ENTRAR NA TELA
+        seedAtual = time(nullptr);
+        cubo->embaralharComSeed(seedAtual);
+        labelSeedInfo->setText(QString("Seed atual: %1").arg(seedAtual));
+
+        // 1. Botão para trocar por uma NOVA seed aleatória
+        connect(
+            botaoNovaSeed,
+            &QPushButton::clicked,
+            this,
+            [this]()
+            {
+                seedAtual = time(nullptr) + (rand() % 1000); // Garante variação caso clique rápido
+                cubo->embaralharComSeed(seedAtual);
+                labelSeedInfo->setText(QString("Seed atual: %1").arg(seedAtual));
+                cubo->setFocus();
+            }
+        );
+
+        // 2. Botão para reiniciar o cubo usando exatamente a MESMA seed atual (para testar as outras IAs)
+        connect(
+            botaoRepetirSeed,
+            &QPushButton::clicked,
+            this,
+            [this]()
+            {
+                cubo->embaralharComSeed(seedAtual);
+                cubo->setFocus();
+            }
+        );
 
         connect(
             botaoVoltar,
