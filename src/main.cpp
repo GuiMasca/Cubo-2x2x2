@@ -364,6 +364,8 @@ public:
         setWindowTitle("Cubo Mágico 2x2x2");
         resize(900, 700);
 
+        aplicarEstilo();
+
         // Permite trocar entre diferentes "telas"
         telas = new QStackedWidget(this);
 
@@ -388,12 +390,73 @@ private:
 
     CuboWidget *cubo;
 
+    void aplicarEstilo()
+{
+    setStyleSheet(R"(
+
+        QWidget {
+            background-color: #111827;
+            color: #F9FAFB;
+            font-family: Arial;
+            font-size: 16px;
+        }
+
+        QLabel#titulo {
+            font-size: 30px;
+            font-weight: bold;
+            color: #FFFFFF;
+        }
+
+        QPushButton {
+            background-color: #374151;
+            color: white;
+
+            border: 1px solid #4B5563;
+            border-radius: 10px;
+
+            padding: 12px 25px;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            min-height: 25px;
+        }
+
+        QPushButton:hover {
+            background-color: #4B5563;
+            border: 1px solid #60A5FA;
+        }
+
+        QPushButton:pressed {
+            background-color: #1F2937;
+        }
+
+        QPushButton#botaoPrincipal {
+            background-color: #2563EB;
+            border: none;
+        }
+
+        QPushButton#botaoPrincipal:hover {
+            background-color: #3B82F6;
+        }
+
+        QPushButton#botaoPrincipal:pressed {
+            background-color: #1D4ED8;
+        }
+
+        QPushButton#botaoSecundario {
+            background-color: #1F2937;
+        }
+
+    )");
+}
+
     void mostrarInstrucoes()
 {
     QDialog dialog(this);
 
     dialog.setWindowTitle("Instruções");
-    dialog.setFixedSize(400, 350);
+    dialog.setFixedSize(400, 700);
 
     QVBoxLayout *layout =
         new QVBoxLayout(&dialog);
@@ -408,8 +471,18 @@ private:
         "<b>R</b> - Girar face direita<br><br>"
         "<b>U</b> - Girar face superior<br><br>"
         "<b>F</b> - Girar face frontal<br><br>"
+        "<b>L</b> - Girar face esquerda<br><br>"
+        "<b>A</b> - Girar face traseira<br><br>"
+        "<b>B</b> - Girar face inferior<br><br>"
+        "<b>T</b> - Girar face direita no sentido anti-horário<br><br>"
+        "<b>I</b> - Girar face superior no sentido anti-horário<br><br>"
+        "<b>G</b> - Girar face frontal no sentido anti-horário<br><br>"
+        "<b>K</b> - Girar face esquerda no sentido anti-horário<br><br>"
+        "<b>S</b> - Girar face traseira no sentido anti-horário<br><br>"
+        "<b>N</b> - Girar face inferior no sentido anti-horário<br><br>"
         "<br>"
-        "Use o teclado enquanto estiver na tela do cubo."
+        "Use o teclado enquanto estiver na tela do cubo.<br><br>"
+        "Segure o botão esquerdo do mouse e arraste para girar a visualização do cubo."
     );
 
     comandos->setAlignment(Qt::AlignLeft);
@@ -447,52 +520,71 @@ private:
     {
         menuPrincipal = new QWidget();
 
-        QVBoxLayout *layout = new QVBoxLayout(menuPrincipal);
+    QVBoxLayout *layout =
+        new QVBoxLayout(menuPrincipal);
 
-        QLabel *titulo = new QLabel("CUBO MÁGICO 2x2x2");
-        titulo->setAlignment(Qt::AlignCenter);
+    QLabel *titulo =
+        new QLabel("CUBO MÁGICO 2x2x2");
 
-        QPushButton *botaoJogar =
-            new QPushButton("JOGAR");
+    titulo->setObjectName("titulo");
+    titulo->setAlignment(Qt::AlignCenter);
 
-        QPushButton *botaoBuscas =
-            new QPushButton("BUSCAS");
+    QPushButton *botaoJogar =
+        new QPushButton("JOGAR");
 
-        layout->addStretch();
+    QPushButton *botaoBuscas =
+        new QPushButton("BUSCAS");
 
-        layout->addWidget(titulo);
+    botaoJogar->setObjectName("botaoPrincipal");
+    botaoBuscas->setObjectName("botaoPrincipal");
 
-        layout->addSpacing(50);
+    botaoJogar->setFixedWidth(300);
+    botaoBuscas->setFixedWidth(300);
 
-        layout->addWidget(botaoJogar);
-        layout->addWidget(botaoBuscas);
+    layout->addStretch();
 
-        layout->addStretch();
+    layout->addWidget(titulo);
 
-        telas->addWidget(menuPrincipal);
+    layout->addSpacing(50);
 
-        // JOGAR
-        connect(
-            botaoJogar,
-            &QPushButton::clicked,
-            this,
-            [this]()
-            {
-                telas->setCurrentWidget(telaJogo);
-                cubo->setFocus();
-            }
-        );
+    layout->addWidget(
+        botaoJogar,
+        0,
+        Qt::AlignCenter
+    );
 
-        // BUSCAS
-        connect(
-            botaoBuscas,
-            &QPushButton::clicked,
-            this,
-            [this]()
-            {
-                telas->setCurrentWidget(menuBuscas);
-            }
-        );
+    layout->addSpacing(15);
+
+    layout->addWidget(
+        botaoBuscas,
+        0,
+        Qt::AlignCenter
+    );
+
+    layout->addStretch();
+
+    telas->addWidget(menuPrincipal);
+
+    connect(
+        botaoJogar,
+        &QPushButton::clicked,
+        this,
+        [this]()
+        {
+            telas->setCurrentWidget(telaJogo);
+            cubo->setFocus();
+        }
+    );
+
+    connect(
+        botaoBuscas,
+        &QPushButton::clicked,
+        this,
+        [this]()
+        {
+            telas->setCurrentWidget(menuBuscas);
+        }
+    );
     }
 
     unsigned int seedAtual = 0; // Será inicializada na criação da tela
@@ -563,6 +655,8 @@ private:
 
         QLabel *titulo =
             new QLabel("ESCOLHA UMA BUSCA");
+
+            titulo->setObjectName("titulo");
 
         titulo->setAlignment(Qt::AlignCenter);
 
