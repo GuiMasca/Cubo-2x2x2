@@ -13,6 +13,8 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QStackedWidget>
+#include <QDialog>
+#include <QHBoxLayout>
 #include <iostream>
 #include <cstdlib> 
 #include <ctime>
@@ -386,6 +388,61 @@ private:
 
     CuboWidget *cubo;
 
+    void mostrarInstrucoes()
+{
+    QDialog dialog(this);
+
+    dialog.setWindowTitle("Instruções");
+    dialog.setFixedSize(400, 350);
+
+    QVBoxLayout *layout =
+        new QVBoxLayout(&dialog);
+
+    QLabel *titulo =
+        new QLabel("COMANDOS DO CUBO");
+
+    titulo->setObjectName("titulo");
+    titulo->setAlignment(Qt::AlignCenter);
+
+    QLabel *comandos = new QLabel(
+        "<b>R</b> - Girar face direita<br><br>"
+        "<b>U</b> - Girar face superior<br><br>"
+        "<b>F</b> - Girar face frontal<br><br>"
+        "<br>"
+        "Use o teclado enquanto estiver na tela do cubo."
+    );
+
+    comandos->setAlignment(Qt::AlignLeft);
+    comandos->setWordWrap(true);
+
+    QPushButton *fechar =
+        new QPushButton("Fechar");
+
+    fechar->setObjectName("botaoPrincipal");
+
+    layout->addWidget(titulo);
+
+    layout->addSpacing(20);
+
+    layout->addWidget(comandos);
+
+    layout->addStretch();
+
+    layout->addWidget(fechar);
+
+    connect(
+        fechar,
+        &QPushButton::clicked,
+        &dialog,
+        &QDialog::accept
+    );
+
+    dialog.exec();
+
+    // Devolve o foco ao cubo
+    cubo->setFocus();
+}
+
     void criarMenuPrincipal()
     {
         menuPrincipal = new QWidget();
@@ -444,72 +501,57 @@ private:
     void criarTelaJogo()
     {
         telaJogo = new QWidget();
-        QVBoxLayout *layout = new QVBoxLayout(telaJogo);
 
-        cubo = new CuboWidget();
-        cubo->setFocusPolicy(Qt::StrongFocus);
+    QVBoxLayout *layout = new QVBoxLayout(telaJogo);
 
-        QLabel *labelMovimentos = new QLabel("Movimentos: 0");
-        labelMovimentos->setAlignment(Qt::AlignCenter);
+    cubo = new CuboWidget();
 
-        cubo->setLabelMovimentos(labelMovimentos);
+    cubo->setFocusPolicy(Qt::StrongFocus);
 
-        labelSeedInfo = new QLabel();
-        labelSeedInfo->setAlignment(Qt::AlignCenter);
+    QPushButton *botaoVoltar =
+        new QPushButton("Voltar");
 
-        QPushButton *botaoNovaSeed = new QPushButton("Gerar Nova Seed (Trocar)");
-        QPushButton *botaoRepetirSeed = new QPushButton("Reiniciar com a Seed Atual");
-        QPushButton *botaoVoltar = new QPushButton("Voltar");
+    QPushButton *botaoInstrucoes =
+        new QPushButton("Instruções");
 
-        layout->addWidget(cubo, 1);
-        layout->addWidget(labelSeedInfo);
-        layout->addWidget(botaoNovaSeed);
-        layout->addWidget(botaoRepetirSeed);
-        layout->addWidget(botaoVoltar);
-        layout->addWidget(labelMovimentos);
+    botaoVoltar->setObjectName("botaoSecundario");
+    botaoInstrucoes->setObjectName("botaoPrincipal");
 
-        telas->addWidget(telaJogo);
+    // Barra inferior
+    QHBoxLayout *barraInferior =
+        new QHBoxLayout();
 
-        // GERA A PRIMEIRA SEED AUTOMATICAMENTE AO ENTRAR NA TELA
-        seedAtual = time(nullptr);
-        cubo->embaralharComSeed(seedAtual);
-        labelSeedInfo->setText(QString("Seed atual: %1").arg(seedAtual));
+    barraInferior->addWidget(botaoVoltar);
 
-        // 1. Botão para trocar por uma NOVA seed aleatória
-        connect(
-            botaoNovaSeed,
-            &QPushButton::clicked,
-            this,
-            [this]()
-            {
-                seedAtual = time(nullptr) + (rand() % 1000); // Garante variação caso clique rápido
-                cubo->embaralharComSeed(seedAtual);
-                labelSeedInfo->setText(QString("Seed atual: %1").arg(seedAtual));
-                cubo->setFocus();
-            }
-        );
+    // Empurra o botão de instruções para a direita
+    barraInferior->addStretch();
 
-        // 2. Botão para reiniciar o cubo usando exatamente a MESMA seed atual (para testar as outras IAs)
-        connect(
-            botaoRepetirSeed,
-            &QPushButton::clicked,
-            this,
-            [this]()
-            {
-                cubo->embaralharComSeed(seedAtual);
-                cubo->setFocus();
-            }
-        );
+    barraInferior->addWidget(botaoInstrucoes);
 
-        connect(
-            botaoVoltar,
-            &QPushButton::clicked,
-            this,
-            [this]()
-            {
-                telas->setCurrentWidget(menuPrincipal);
-            }
-        );
+    layout->addWidget(cubo, 1);
+    layout->addLayout(barraInferior);
+
+    telas->addWidget(telaJogo);
+
+    connect(
+        botaoVoltar,
+        &QPushButton::clicked,
+        this,
+        [this]()
+        {
+            telas->setCurrentWidget(menuPrincipal);
+        }
+    );
+
+    connect(
+        botaoInstrucoes,
+        &QPushButton::clicked,
+        this,
+        [this]()
+        {
+            mostrarInstrucoes();
+        }
+    );
     }
 
     void criarMenuBuscas()
