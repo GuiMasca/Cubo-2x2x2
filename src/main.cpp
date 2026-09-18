@@ -12,6 +12,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QRandomGenerator>
 #include <QStackedWidget>
 #include <QDialog>
 #include <QHBoxLayout>
@@ -591,14 +592,43 @@ private:
     QLabel *labelSeedInfo;
 
     void criarTelaJogo()
-    {
-        telaJogo = new QWidget();
+{
+    telaJogo = new QWidget();
 
-    QVBoxLayout *layout = new QVBoxLayout(telaJogo);
+    QVBoxLayout *layout =
+        new QVBoxLayout(telaJogo);
+
+    // CUBO
 
     cubo = new CuboWidget();
 
     cubo->setFocusPolicy(Qt::StrongFocus);
+
+    labelSeedInfo = new QLabel();
+    labelSeedInfo->setAlignment(Qt::AlignCenter);
+
+    // CONTROLES DO JOGO
+
+    QPushButton *botaoGerarSeed =
+        new QPushButton("Gerar Nova Seed (Trocar)");
+
+    QPushButton *botaoEmbaralhar =
+        new QPushButton("Reiniciar com a Seed Atual");
+
+    botaoGerarSeed->setObjectName("botaoControle");
+    botaoEmbaralhar->setObjectName("botaoControle");
+
+    QHBoxLayout *barraControles =
+        new QHBoxLayout();
+
+    barraControles->addStretch();
+
+    barraControles->addWidget(botaoGerarSeed);
+    barraControles->addWidget(botaoEmbaralhar);
+
+    barraControles->addStretch();
+
+    // BARRA INFERIOR
 
     QPushButton *botaoVoltar =
         new QPushButton("Voltar");
@@ -609,21 +639,31 @@ private:
     botaoVoltar->setObjectName("botaoSecundario");
     botaoInstrucoes->setObjectName("botaoPrincipal");
 
-    // Barra inferior
     QHBoxLayout *barraInferior =
         new QHBoxLayout();
 
     barraInferior->addWidget(botaoVoltar);
 
-    // Empurra o botão de instruções para a direita
     barraInferior->addStretch();
 
     barraInferior->addWidget(botaoInstrucoes);
 
+    // =========================
+    // MONTA A TELA
+    // =========================
+
     layout->addWidget(cubo, 1);
+
+    layout->addWidget(labelSeedInfo);
+    layout->addLayout(barraControles);
+
     layout->addLayout(barraInferior);
 
     telas->addWidget(telaJogo);
+
+    // =========================
+    // BOTÕES
+    // =========================
 
     connect(
         botaoVoltar,
@@ -644,7 +684,40 @@ private:
             mostrarInstrucoes();
         }
     );
-    }
+
+
+    seedAtual = static_cast<unsigned int>(time(nullptr));
+    cubo->embaralharComSeed(seedAtual);
+    labelSeedInfo->setText(QString("Seed atual: %1").arg(seedAtual));
+
+    connect(
+        botaoGerarSeed,
+        &QPushButton::clicked,
+        this,
+        [this]()
+        {
+            unsigned int novaSeed;
+            do {
+                novaSeed = QRandomGenerator::global()->generate();
+            } while (novaSeed == seedAtual);
+            seedAtual = novaSeed;
+            cubo->embaralharComSeed(seedAtual);
+            labelSeedInfo->setText(QString("Seed atual: %1").arg(seedAtual));
+            cubo->setFocus();
+        }
+    );
+
+    connect(
+        botaoEmbaralhar,
+        &QPushButton::clicked,
+        this,
+        [this]()
+        {
+            cubo->embaralharComSeed(seedAtual);
+            cubo->setFocus();
+        }
+    );
+}
 
     void criarMenuBuscas()
     {
