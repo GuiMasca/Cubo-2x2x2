@@ -31,14 +31,21 @@ public:
     }
 
     void setLabelMovimentos(QLabel* label) {
-    labelMovimentos = label;
-}
+        labelMovimentos = label;
+    }
+
+    void setLabelStatus(QLabel* label){
+        labelStatus = label;
+        atualizarStatus();
+    }
 
     void embaralharComSeed(unsigned int seed) {
         movimentosJogador = 0;
         meuCubo = CubeState(); // Reseta para o estado resolvido
         srand(seed);           // Define a seed desejada
         embaralharCubo(10);    // Executa os 10 movimentos de embaralhamento
+
+        atualizarStatus(); // Atualiza o status do cubo após o embaralhamento
     }
 
     void embaralharCubo(int passos = 10) {
@@ -95,10 +102,13 @@ protected:
     QPoint ultimaPosicaoMouse;
     int movimentosJogador = 0;
     QLabel* labelMovimentos = nullptr;
+    QLabel* labelStatus = nullptr;
 
     QOpenGLShaderProgram *m_program;
     QOpenGLBuffer m_vbo;
     QOpenGLVertexArrayObject m_vao;
+
+    
 
     void initializeGL() override
     {
@@ -241,6 +251,8 @@ protected:
         );
 }
         
+        atualizarStatus();
+
         update(); // Solicita o redesenho imediato da tela com as novas cores atualizadas
     }
 
@@ -353,6 +365,27 @@ void paintGL() override
 
         m_vao.release();
         m_program->release();
+    }
+    void atualizarStatus()
+    {
+        if (!labelStatus)
+            return;
+
+        if (meuCubo.isGoal()) {
+            labelStatus->setText("CUBO RESOLVIDO!");
+            labelStatus->setStyleSheet(
+                "color: #22C55E;"
+                "font-weight: bold;"
+                "font-size: 18px;"
+            );
+        }
+        else {
+            labelStatus->setText("Cubo não resolvido");
+            labelStatus->setStyleSheet(
+                "color: #F9FAFB;"
+                "font-size: 16px;"
+            );
+        }
     }
 };
 
@@ -607,6 +640,20 @@ private:
     labelSeedInfo = new QLabel();
     labelSeedInfo->setAlignment(Qt::AlignCenter);
 
+    QLabel *labelMovimentos =
+    new QLabel("Movimentos: 0");
+
+    labelMovimentos->setAlignment(Qt::AlignCenter);
+
+    cubo->setLabelMovimentos(labelMovimentos);
+
+    QLabel *labelStatus =
+    new QLabel("Cubo não resolvido");
+
+    labelStatus->setAlignment(Qt::AlignCenter);
+
+    cubo->setLabelStatus(labelStatus);
+
     // CONTROLES DO JOGO
 
     QPushButton *botaoGerarSeed =
@@ -656,6 +703,8 @@ private:
 
     layout->addWidget(labelSeedInfo);
     layout->addLayout(barraControles);
+    layout->addWidget(labelMovimentos);
+    layout->addWidget(labelStatus);
 
     layout->addLayout(barraInferior);
 

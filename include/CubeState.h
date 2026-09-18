@@ -34,6 +34,7 @@ struct CubeState {
         return cornerColors == solved;
     }
 
+
     // Movimento de cima horário (U) (Topo - Gira as quinas 0, 1, 3, 2)
     CubeState moveU() const {
         CubeState next = *this;
