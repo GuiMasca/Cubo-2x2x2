@@ -23,6 +23,18 @@ struct CubeState {
             {1, 3, 4}, // 6: DBL (Amarelo, Laranja, Verde)
             {1, 3, 5}  // 7: DBR (Amarelo, Laranja, Azul)
         };
+
+    }
+
+    // Identifica apenas a configuração do cubo, independentemente do caminho.
+    std::string chave() const {
+        std::string resultado;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 3; j++) {
+                resultado += char('0' + cornerColors[i][j]);
+            }
+        }
+        return resultado;
     }
 
     bool isGoal() const {
@@ -33,7 +45,6 @@ struct CubeState {
         };
         return cornerColors == solved;
     }
-
 
     // Movimento de cima horário (U) (Topo - Gira as quinas 0, 1, 3, 2)
     CubeState moveU() const {
@@ -324,7 +335,11 @@ struct CubeState {
 
 
     std::vector<CubeState> getSuccessors() const {
-        return {this->moveU(), this->moveR(), this->moveF()};
+        // Todas as faces, nos dois sentidos. Cada sucessor custa um movimento.
+        return {
+            moveU(), moveR(), moveF(), moveL(), moveB(), moveA(),
+            moveI(), moveT(), moveG(), moveK(), moveN(), moveS()
+        };
     }
 };
 

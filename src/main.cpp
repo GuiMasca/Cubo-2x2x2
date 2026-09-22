@@ -16,15 +16,55 @@
 #include <QStackedWidget>
 #include <QDialog>
 #include <QHBoxLayout>
+#include <QMessageBox>
+#include <QProgressDialog>
+#include <QThread>
+#include <exception>
 #include <iostream>
 #include <cstdlib> 
 #include <ctime>
 #include "CubeState.h"
+#include "Busca.h"
+
+// Apenas o cálculo roda nesta thread; os widgets ficam na thread da interface.
+class ThreadBuscaLargura : public QThread
+{
+public:
+    CubeState estadoInicial;
+    ResultadoBusca resultado;
+    QString erro;
+    bool cancelada = false;
+
+    ThreadBuscaLargura(const CubeState &estado, QObject *parent)
+        : QThread(parent), estadoInicial(estado) {}
+
+protected:
+    void run() override
+    {
+        try {
+            resultado = buscaLargura(estadoInicial, verificarCancelamento);
+        }
+        catch (const std::exception &excecao) {
+            erro = QString::fromUtf8(excecao.what());
+        }
+        cancelada = isInterruptionRequested();
+    }
+
+private:
+    static bool verificarCancelamento()
+    {
+        return QThread::currentThread()->isInterruptionRequested();
+    }
+};
 
 class CuboWidget : public QOpenGLWidget,
                    protected QOpenGLFunctions
 {
 public:
+
+    CubeState getEstadoAtual() const {
+        return meuCubo;
+    }
 
     int getMovimentosJogador() const {
         return movimentosJogador;
@@ -768,6 +808,86 @@ private:
     );
 }
 
+    void iniciarBuscaLargura(QPushButton *botao)
+    {
+        ThreadBuscaLargura *busca = new ThreadBuscaLargura(cubo->getEstadoAtual(), this);
+        QProgressDialog *progresso = new QProgressDialog(
+            "Buscando a solução do cubo atual...", "Cancelar", 0, 0, this);
+        progresso->setWindowTitle("Busca em largura");
+        progresso->setWindowModality(Qt::WindowModal);
+        progresso->setMinimumDuration(0);
+        progresso->setAutoClose(false);
+        progresso->setAutoReset(false);
+        botao->setEnabled(false);
+
+        connect(progresso, &QProgressDialog::canceled,
+                busca, &QThread::requestInterruption);
+
+        // Ao fechar o programa, aguarda o encerramento cooperativo do cálculo.
+        connect(qApp, &QCoreApplication::aboutToQuit, busca, [busca]() {
+            busca->requestInterruption();
+            busca->wait();
+        });
+
+        connect(busca, &QThread::finished, this, [this, busca, progresso, botao]() {
+            progresso->hide();
+            progresso->deleteLater();
+            botao->setEnabled(true);
+
+            QString texto;
+            if (busca->cancelada) {
+                texto = "Busca cancelada.";
+            }
+            else if (!busca->erro.isEmpty()) {
+                texto = "Não foi possível concluir a busca.\n" + busca->erro;
+            }
+            else {
+                const ResultadoBusca &resultado = busca->resultado;
+                texto = QString("Estados visitados (incluindo o objetivo, se encontrado): %1\n\n")
+                    .arg(static_cast<qulonglong>(resultado.estadosVisitados));
+
+                if (!resultado.encontrou) {
+                    texto += "Sem solução.";
+                }
+                else if (resultado.passos.empty()) {
+                    texto += "O cubo já está resolvido.";
+                }
+                else {
+                    texto += QString("Solução em %1 movimentos.\n"
+                                     "Na tela do jogo, execute as teclas nesta ordem.\n"
+                                     "Os sentidos são vistos de frente para a face girada.\n\n")
+                        .arg(static_cast<qulonglong>(resultado.passos.size()));
+                    for (std::size_t i = 0; i < resultado.passos.size(); i++) {
+                        QString tecla = QString::fromStdString(resultado.passos[i]);
+                        QString descricao;
+                        if (tecla == "U") descricao = "Superior — horário";
+                        else if (tecla == "I") descricao = "Superior — anti-horário";
+                        else if (tecla == "R") descricao = "Direita — horário";
+                        else if (tecla == "T") descricao = "Direita — anti-horário";
+                        else if (tecla == "F") descricao = "Frontal — horário";
+                        else if (tecla == "G") descricao = "Frontal — anti-horário";
+                        else if (tecla == "L") descricao = "Esquerda — horário";
+                        else if (tecla == "K") descricao = "Esquerda — anti-horário";
+                        else if (tecla == "B") descricao = "Inferior — horário";
+                        else if (tecla == "N") descricao = "Inferior — anti-horário";
+                        else if (tecla == "A") descricao = "Traseira — horário";
+                        else if (tecla == "S") descricao = "Traseira — anti-horário";
+                        texto += QString("%1. %2: %3\n")
+                            .arg(static_cast<qulonglong>(i + 1)).arg(tecla).arg(descricao);
+                    }
+                }
+            }
+            busca->deleteLater();
+            QMessageBox mensagem(QMessageBox::Information, "Busca em largura",
+                                 texto, QMessageBox::Ok, this);
+            mensagem.setTextFormat(Qt::PlainText);
+            mensagem.exec();
+        });
+
+        progresso->show();
+        busca->start();
+    }
+
     void criarMenuBuscas()
     {
         menuBuscas = new QWidget();
@@ -784,6 +904,10 @@ private:
 
         QPushButton *busca1 =
             new QPushButton("Busca por largura");
+
+        connect(busca1, &QPushButton::clicked, this, [this, busca1]() {
+            iniciarBuscaLargura(busca1);
+        });
 
         QPushButton *busca2 =
             new QPushButton("Busca por profundidade");
