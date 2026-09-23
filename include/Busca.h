@@ -168,9 +168,15 @@ inline ResultadoBusca buscaProfundidadeIterativa(
         ResultadoBusca resultadoAtual = executarBusca(estadoInicial, estrutura)
 
         //estados revisitados em limites diferentes também contam como estados visitados pelo algoritmo
-        resultadoFinal.estadosVisitados +=  
+        resultadoFinal.estadosVisitados +=  resultadoAtual.estadosVisitados;
+        if(resultadoAtual.encontrou)
+        {
+            resultadoFinal.encontrou = true;
+            resultadoFinal.passos = resultadoAtual.passos;
+            return resultadoFinal;
+        }
     }
-
+    return resultadoFinal;
 }
 
 #endif
