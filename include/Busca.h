@@ -5,8 +5,8 @@
 #include <queue>
 #include <string>
 #include <unordered_set>
-#include <vector>
 #include <unordered_map>
+#include <vector>
 #include "CubeState.h"
 
 struct ResultadoBusca
@@ -14,6 +14,7 @@ struct ResultadoBusca
     bool encontrou;
     std::size_t estadosVisitados;
     std::vector<std::string> passos;
+    std::size_t limiteEncontrado = 0;
 };
 
 // FIFO: o primeiro estado adicionado é o primeiro a ser removido.
@@ -49,7 +50,7 @@ struct EstruturaBusca
     }
 };
 
-struct EstruturaProfundidadeLimitada:
+struct EstruturaProfundidadeLimitada
 {
     bool (*cancelamentoSolicitado)() = nullptr;
 
@@ -70,7 +71,9 @@ struct EstruturaProfundidadeLimitada:
 
         // nao permite ultrapassar o limite atual
         if (profundidade>limite)
+        {
             return;
+        }
         
         std::string chave = estado.chave();
         auto encontrado = menorProfundidade.find(chave);
@@ -95,7 +98,11 @@ struct EstruturaProfundidadeLimitada:
         (cancelamentoSolicitado != nullptr && cancelamentoSolicitado());
     }
 };
-  
+
+inline bool avaliarEstado(const CubeState &estado)
+{
+    return estado.isGoal();
+};
 
 // O template permite trocar a estrutura sem alterar o laço.
 // A estrutura recebida deve estar vazia e oferecer adicionar, remover e vazia.
@@ -153,6 +160,7 @@ inline ResultadoBusca buscaProfundidadeIterativa(
     ResultadoBusca resultadoFinal;
     resultadoFinal.encontrou = false;
     resultadoFinal.estadosVisitados = 0;
+    resultadoFinal.limiteEncontrado = 0;
 
     for (std::size_t limite=0; limite<=limiteMaximo; limite++)
     {
@@ -161,11 +169,11 @@ inline ResultadoBusca buscaProfundidadeIterativa(
             return resultadoFinal;
         }
 
-        EstruturaProfundidadeLimitada estrutura (limite);
+        EstruturaProfundidadeLimitada estrutura(limite);
 
         estrutura.cancelamentoSolicitado=cancelamentoSolicitado;
 
-        ResultadoBusca resultadoAtual = executarBusca(estadoInicial, estrutura)
+        ResultadoBusca resultadoAtual = executarBusca(estadoInicial, estrutura);
 
         //estados revisitados em limites diferentes também contam como estados visitados pelo algoritmo
         resultadoFinal.estadosVisitados +=  resultadoAtual.estadosVisitados;
@@ -173,6 +181,7 @@ inline ResultadoBusca buscaProfundidadeIterativa(
         {
             resultadoFinal.encontrou = true;
             resultadoFinal.passos = resultadoAtual.passos;
+            resultadoFinal.limiteEncontrado = limite;
             return resultadoFinal;
         }
     }
