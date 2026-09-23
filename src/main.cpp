@@ -57,6 +57,53 @@ private:
     }
 };
 
+class ThreadBuscaProfundidade : public QThread
+{
+public:
+    CubeState estadoInicial;
+    ResultadoBusca resultado;
+    QString erro;
+    bool cancelada = false;
+
+    std::size_t limiteMaximo;
+
+    ThreadBuscaProfundidade(
+        const CubeState &estado,
+        std::size_t limiteBusca,
+        QObject *parent = nullptr)
+        : QThread(parent),
+          estadoInicial(estado),
+          limiteMaximo(limiteBusca)
+    {
+    }
+
+protected:
+    void run() override
+    {
+        try
+        {
+            resultado = buscaProfundidadeIterativa(
+                estadoInicial,
+                limiteMaximo,
+                verificarCancelamento);
+        }
+        catch (const std::exception &excecao)
+        {
+            erro = QString::fromUtf8(
+                excecao.what());
+        }
+
+        cancelada = isInterruptionRequested();
+    }
+
+private:
+    static bool verificarCancelamento()
+    {
+        return QThread::currentThread()
+            ->isInterruptionRequested();
+    }
+};
+
 class CuboWidget : public QOpenGLWidget,
                    protected QOpenGLFunctions
 {
@@ -888,6 +935,144 @@ private:
         busca->start();
     }
 
+    void iniciarBuscaProfundidade(QPushButton *botao)
+    {
+        ThreadBuscaProfundidade *busca =
+            new ThreadBuscaProfundidade(
+                cubo->getEstadoAtual(),
+                10,
+                this);
+
+        QProgressDialog *progresso =
+            new QProgressDialog(
+                "Buscando a solução do cubo atual...",
+                "Cancelar",
+                0,
+                0,
+                this);
+
+        progresso->setWindowTitle(
+            "Busca em profundidade iterativa");
+
+        progresso->setWindowModality(
+            Qt::WindowModal);
+
+        progresso->setMinimumDuration(0);
+        progresso->setAutoClose(false);
+        progresso->setAutoReset(false);
+
+        botao->setEnabled(false);
+
+        connect(
+            progresso,
+            &QProgressDialog::canceled,
+            busca,
+            &QThread::requestInterruption);
+
+        connect(
+            qApp,
+            &QCoreApplication::aboutToQuit,
+            busca,
+            [busca]()
+            {
+                busca->requestInterruption();
+                busca->wait();
+            });
+
+        connect(
+            busca,
+            &QThread::finished,
+            this,
+            [this, busca, progresso, botao]()
+            {
+                progresso->hide();
+                progresso->deleteLater();
+
+                botao->setEnabled(true);
+
+                QString texto;
+
+                if (busca->cancelada)
+                {
+                    texto = "Busca cancelada.";
+                }
+                else if (!busca->erro.isEmpty())
+                {
+                    texto =
+                        "Não foi possível concluir a busca.\n" +
+                        busca->erro;
+                }
+                else
+                {
+                    const ResultadoBusca &resultado =
+                        busca->resultado;
+
+                    texto =
+                        QString(
+                            "Estados visitados: %1\n\n")
+                            .arg(
+                                static_cast<qulonglong>(
+                                    resultado.estadosVisitados));
+
+                    if (!resultado.encontrou)
+                    {
+                        texto +=
+                            "Nenhuma solução encontrada até o limite máximo.";
+                    }
+                    else if (resultado.passos.empty())
+                    {
+                        texto +=
+                            "O cubo já está resolvido.";
+                    }
+                    else
+                    {
+                        texto += QString(
+                            "Solução encontrada no limite: %1\n"
+                            "Solução em %2 movimentos.\n\n"
+                            "Sequência:\n")
+                            .arg(
+                                static_cast<qulonglong>(
+                                    resultado.limiteEncontrado))
+                            .arg(
+                                static_cast<qulonglong>(
+                                    resultado.passos.size()));
+
+                        for (std::size_t i = 0;
+                            i < resultado.passos.size();
+                            i++)
+                        {
+                            texto +=
+                                QString::fromStdString(
+                                    resultado.passos[i]);
+
+                            if (i + 1 <
+                                resultado.passos.size())
+                            {
+                                texto += " ";
+                            }
+                        }
+                    }
+                }
+
+                busca->deleteLater();
+
+                QMessageBox mensagem(
+                    QMessageBox::Information,
+                    "Busca em profundidade iterativa",
+                    texto,
+                    QMessageBox::Ok,
+                    this);
+
+                mensagem.setTextFormat(
+                    Qt::PlainText);
+
+                mensagem.exec();
+            });
+
+        progresso->show();
+        busca->start();
+    }
+
     void criarMenuBuscas()
     {
         menuBuscas = new QWidget();
@@ -911,6 +1096,14 @@ private:
 
         QPushButton *busca2 =
             new QPushButton("Busca por profundidade");
+            connect(
+                busca2,
+                &QPushButton::clicked,
+                this,
+                [this, busca2]()
+                {
+                    iniciarBuscaProfundidade(busca2);
+                });
 
         QPushButton *busca3 =
             new QPushButton("Busca por estrela");
