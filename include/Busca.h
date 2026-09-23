@@ -6,6 +6,7 @@
 #include <string>
 #include <unordered_set>
 #include <vector>
+#include <unordered_map>
 #include "CubeState.h"
 
 struct ResultadoBusca
@@ -48,11 +49,53 @@ struct EstruturaBusca
     }
 };
 
-// Função avaliadora da largura: verifica se o estado é o objetivo.
-inline bool avaliarEstado(const CubeState &estado)
+struct EstruturaProfundidadeLimitada:
 {
-    return estado.isGoal();
-}
+    bool (*cancelamentoSolicitado)() = nullptr;
+
+    std::size_t limite;
+    std::vector<CubeState> estados;
+
+    // Para cada configuração, guarda a menor profundidade já encontrada.
+    std::unordered_map<std::string, std::size_t> menorProfundidade;
+
+    EstruturaProfundidadeLimitada(std::size_t limiteBusca)
+        : limite(limiteBusca)
+        {
+        }
+
+    void adicionar (const CubeState &estado)
+    {
+        std::size_t profundidade = estado.path.size();
+
+        // nao permite ultrapassar o limite atual
+        if (profundidade>limite)
+            return;
+        
+        std::string chave = estado.chave();
+        auto encontrado = menorProfundidade.find(chave);
+
+        if (encontrado == menorProfundidade.end() || profundidade < encontrado->second)
+        {
+            menorProfundidade[chave] = profundidade;
+            estados.push_back(estado);
+        }
+    }
+
+    CubeState remover()
+    {
+        CubeState estado = estados.back();
+        estados.pop_back();
+        return estado;
+    }
+
+    bool vazia() const
+    {
+        return estados.empty() ||
+        (cancelamentoSolicitado != nullptr && cancelamentoSolicitado());
+    }
+};
+  
 
 // O template permite trocar a estrutura sem alterar o laço.
 // A estrutura recebida deve estar vazia e oferecer adicionar, remover e vazia.
@@ -95,12 +138,39 @@ ResultadoBusca executarBusca(CubeState estadoInicial, Estrutura &estrutura)
 }
 
 // Ao cancelar, encontrou == false não significa que o cubo não tem solução.
-inline ResultadoBusca buscaLargura(const CubeState &estadoInicial,
-                                  bool (*cancelamentoSolicitado)() = nullptr)
+inline ResultadoBusca buscaLargura(const CubeState &estadoInicial, bool (*cancelamentoSolicitado)() = nullptr)
 {
     EstruturaBusca estrutura;
     estrutura.cancelamentoSolicitado = cancelamentoSolicitado;
     return executarBusca(estadoInicial, estrutura);
+}
+
+inline ResultadoBusca buscaProfundidadeIterativa(
+    const CubeState &estadoInicial,
+    std::size_t limiteMaximo,
+    bool (*cancelamentoSolicitado)() = nullptr)
+{
+    ResultadoBusca resultadoFinal;
+    resultadoFinal.encontrou = false;
+    resultadoFinal.estadosVisitados = 0;
+
+    for (std::size_t limite=0; limite<=limiteMaximo; limite++)
+    {
+        if (cancelamentoSolicitado != nullptr && cancelamentoSolicitado())
+        {
+            return resultadoFinal;
+        }
+
+        EstruturaProfundidadeLimitada estrutura (limite);
+
+        estrutura.cancelamentoSolicitado=cancelamentoSolicitado;
+
+        ResultadoBusca resultadoAtual = executarBusca(estadoInicial, estrutura)
+
+        //estados revisitados em limites diferentes também contam como estados visitados pelo algoritmo
+        resultadoFinal.estadosVisitados +=  
+    }
+
 }
 
 #endif
