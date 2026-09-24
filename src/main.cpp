@@ -128,6 +128,11 @@ public:
 
     void embaralharComSeed(unsigned int seed) {
         movimentosJogador = 0;
+        //muda imediatamente o contador exibido na tela
+        if (labelMovimentos)
+        {
+            labelMovimentos->setText("Movimentos: 0");
+        }
         meuCubo = CubeState(); // Reseta para o estado resolvido
         srand(seed);           // Define a seed desejada
         embaralharCubo(10);    // Executa os 10 movimentos de embaralhamento
@@ -502,364 +507,364 @@ public:
         telas->setCurrentWidget(menuPrincipal);
     }
 
-private:
-    QStackedWidget *telas;
+    private:
+        QStackedWidget *telas;
 
-    QWidget *menuPrincipal;
-    QWidget *telaJogo;
-    QWidget *menuBuscas;
+        QWidget *menuPrincipal;
+        QWidget *telaJogo;
+        QWidget *menuBuscas;
 
-    CuboWidget *cubo;
+        CuboWidget *cubo;
 
-    void aplicarEstilo()
-{
-    setStyleSheet(R"(
+        void aplicarEstilo()
+    {
+        setStyleSheet(R"(
 
-        QWidget {
-            background-color: #111827;
-            color: #F9FAFB;
-            font-family: Arial;
-            font-size: 16px;
-        }
+            QWidget {
+                background-color: #111827;
+                color: #F9FAFB;
+                font-family: Arial;
+                font-size: 16px;
+            }
 
-        QLabel#titulo {
-            font-size: 30px;
-            font-weight: bold;
-            color: #FFFFFF;
-        }
+            QLabel#titulo {
+                font-size: 30px;
+                font-weight: bold;
+                color: #FFFFFF;
+            }
 
-        QPushButton {
-            background-color: #374151;
-            color: white;
+            QPushButton {
+                background-color: #374151;
+                color: white;
 
-            border: 1px solid #4B5563;
-            border-radius: 10px;
+                border: 1px solid #4B5563;
+                border-radius: 10px;
 
-            padding: 12px 25px;
+                padding: 12px 25px;
 
-            font-size: 16px;
-            font-weight: bold;
+                font-size: 16px;
+                font-weight: bold;
 
-            min-height: 25px;
-        }
+                min-height: 25px;
+            }
 
-        QPushButton:hover {
-            background-color: #4B5563;
-            border: 1px solid #60A5FA;
-        }
+            QPushButton:hover {
+                background-color: #4B5563;
+                border: 1px solid #60A5FA;
+            }
 
-        QPushButton:pressed {
-            background-color: #1F2937;
-        }
+            QPushButton:pressed {
+                background-color: #1F2937;
+            }
 
-        QPushButton#botaoPrincipal {
-            background-color: #2563EB;
-            border: none;
-        }
+            QPushButton#botaoPrincipal {
+                background-color: #2563EB;
+                border: none;
+            }
 
-        QPushButton#botaoPrincipal:hover {
-            background-color: #3B82F6;
-        }
+            QPushButton#botaoPrincipal:hover {
+                background-color: #3B82F6;
+            }
 
-        QPushButton#botaoPrincipal:pressed {
-            background-color: #1D4ED8;
-        }
+            QPushButton#botaoPrincipal:pressed {
+                background-color: #1D4ED8;
+            }
 
-        QPushButton#botaoSecundario {
-            background-color: #1F2937;
-        }
+            QPushButton#botaoSecundario {
+                background-color: #1F2937;
+            }
 
-    )");
-}
+        )");
+    }
 
     void mostrarInstrucoes()
-{
-    QDialog dialog(this);
+    {
+        QDialog dialog(this);
 
-    dialog.setWindowTitle("Instruções");
-    dialog.setFixedSize(400, 700);
+        dialog.setWindowTitle("Instruções");
+        dialog.setFixedSize(400, 700);
 
-    QVBoxLayout *layout =
-        new QVBoxLayout(&dialog);
+        QVBoxLayout *layout =
+            new QVBoxLayout(&dialog);
 
-    QLabel *titulo =
-        new QLabel("COMANDOS DO CUBO");
+        QLabel *titulo =
+            new QLabel("COMANDOS DO CUBO");
 
-    titulo->setObjectName("titulo");
-    titulo->setAlignment(Qt::AlignCenter);
+        titulo->setObjectName("titulo");
+        titulo->setAlignment(Qt::AlignCenter);
 
-    QLabel *comandos = new QLabel(
-        "<b>R</b> - Girar face direita<br><br>"
-        "<b>U</b> - Girar face superior<br><br>"
-        "<b>F</b> - Girar face frontal<br><br>"
-        "<b>L</b> - Girar face esquerda<br><br>"
-        "<b>A</b> - Girar face traseira<br><br>"
-        "<b>B</b> - Girar face inferior<br><br>"
-        "<b>T</b> - Girar face direita no sentido anti-horário<br><br>"
-        "<b>I</b> - Girar face superior no sentido anti-horário<br><br>"
-        "<b>G</b> - Girar face frontal no sentido anti-horário<br><br>"
-        "<b>K</b> - Girar face esquerda no sentido anti-horário<br><br>"
-        "<b>S</b> - Girar face traseira no sentido anti-horário<br><br>"
-        "<b>N</b> - Girar face inferior no sentido anti-horário<br><br>"
-        "<br>"
-        "Use o teclado enquanto estiver na tela do cubo.<br><br>"
-        "Segure o botão esquerdo do mouse e arraste para girar a visualização do cubo."
-    );
+        QLabel *comandos = new QLabel(
+            "<b>R</b> - Girar face direita<br><br>"
+            "<b>U</b> - Girar face superior<br><br>"
+            "<b>F</b> - Girar face frontal<br><br>"
+            "<b>L</b> - Girar face esquerda<br><br>"
+            "<b>A</b> - Girar face traseira<br><br>"
+            "<b>B</b> - Girar face inferior<br><br>"
+            "<b>T</b> - Girar face direita no sentido anti-horário<br><br>"
+            "<b>I</b> - Girar face superior no sentido anti-horário<br><br>"
+            "<b>G</b> - Girar face frontal no sentido anti-horário<br><br>"
+            "<b>K</b> - Girar face esquerda no sentido anti-horário<br><br>"
+            "<b>S</b> - Girar face traseira no sentido anti-horário<br><br>"
+            "<b>N</b> - Girar face inferior no sentido anti-horário<br><br>"
+            "<br>"
+            "Use o teclado enquanto estiver na tela do cubo.<br><br>"
+            "Segure o botão esquerdo do mouse e arraste para girar a visualização do cubo."
+        );
 
-    comandos->setAlignment(Qt::AlignLeft);
-    comandos->setWordWrap(true);
+        comandos->setAlignment(Qt::AlignLeft);
+        comandos->setWordWrap(true);
 
-    QPushButton *fechar =
-        new QPushButton("Fechar");
+        QPushButton *fechar =
+            new QPushButton("Fechar");
 
-    fechar->setObjectName("botaoPrincipal");
+        fechar->setObjectName("botaoPrincipal");
 
-    layout->addWidget(titulo);
+        layout->addWidget(titulo);
 
-    layout->addSpacing(20);
+        layout->addSpacing(20);
 
-    layout->addWidget(comandos);
+        layout->addWidget(comandos);
 
-    layout->addStretch();
+        layout->addStretch();
 
-    layout->addWidget(fechar);
+        layout->addWidget(fechar);
 
-    connect(
-        fechar,
-        &QPushButton::clicked,
-        &dialog,
-        &QDialog::accept
-    );
+        connect(
+            fechar,
+            &QPushButton::clicked,
+            &dialog,
+            &QDialog::accept
+        );
 
-    dialog.exec();
+        dialog.exec();
 
-    // Devolve o foco ao cubo
-    cubo->setFocus();
-}
+        // Devolve o foco ao cubo
+        cubo->setFocus();
+    }
 
     void criarMenuPrincipal()
     {
         menuPrincipal = new QWidget();
 
-    QVBoxLayout *layout =
-        new QVBoxLayout(menuPrincipal);
+        QVBoxLayout *layout =
+            new QVBoxLayout(menuPrincipal);
 
-    QLabel *titulo =
-        new QLabel("CUBO MÁGICO 2x2x2");
+        QLabel *titulo =
+            new QLabel("CUBO MÁGICO 2x2x2");
 
-    titulo->setObjectName("titulo");
-    titulo->setAlignment(Qt::AlignCenter);
+        titulo->setObjectName("titulo");
+        titulo->setAlignment(Qt::AlignCenter);
 
-    QPushButton *botaoJogar =
-        new QPushButton("JOGAR");
+        QPushButton *botaoJogar =
+            new QPushButton("JOGAR");
 
-    QPushButton *botaoBuscas =
-        new QPushButton("BUSCAS");
+        QPushButton *botaoBuscas =
+            new QPushButton("BUSCAS");
 
-    botaoJogar->setObjectName("botaoPrincipal");
-    botaoBuscas->setObjectName("botaoPrincipal");
+        botaoJogar->setObjectName("botaoPrincipal");
+        botaoBuscas->setObjectName("botaoPrincipal");
 
-    botaoJogar->setFixedWidth(300);
-    botaoBuscas->setFixedWidth(300);
+        botaoJogar->setFixedWidth(300);
+        botaoBuscas->setFixedWidth(300);
 
-    layout->addStretch();
+        layout->addStretch();
 
-    layout->addWidget(titulo);
+        layout->addWidget(titulo);
 
-    layout->addSpacing(50);
+        layout->addSpacing(50);
 
-    layout->addWidget(
-        botaoJogar,
-        0,
-        Qt::AlignCenter
-    );
+        layout->addWidget(
+            botaoJogar,
+            0,
+            Qt::AlignCenter
+        );
 
-    layout->addSpacing(15);
+        layout->addSpacing(15);
 
-    layout->addWidget(
-        botaoBuscas,
-        0,
-        Qt::AlignCenter
-    );
+        layout->addWidget(
+            botaoBuscas,
+            0,
+            Qt::AlignCenter
+        );
 
-    layout->addStretch();
+        layout->addStretch();
 
-    telas->addWidget(menuPrincipal);
+        telas->addWidget(menuPrincipal);
 
-    connect(
-        botaoJogar,
-        &QPushButton::clicked,
-        this,
-        [this]()
-        {
-            telas->setCurrentWidget(telaJogo);
-            cubo->setFocus();
-        }
-    );
+        connect(
+            botaoJogar,
+            &QPushButton::clicked,
+            this,
+            [this]()
+            {
+                telas->setCurrentWidget(telaJogo);
+                cubo->setFocus();
+            }
+        );
 
-    connect(
-        botaoBuscas,
-        &QPushButton::clicked,
-        this,
-        [this]()
-        {
-            telas->setCurrentWidget(menuBuscas);
-        }
-    );
+        connect(
+            botaoBuscas,
+            &QPushButton::clicked,
+            this,
+            [this]()
+            {
+                telas->setCurrentWidget(menuBuscas);
+            }
+        );
     }
 
     unsigned int seedAtual = 0; // Será inicializada na criação da tela
     QLabel *labelSeedInfo;
 
+    CubeState estadoOriginalSeed;
+
     void criarTelaJogo()
-{
-    telaJogo = new QWidget();
+    {
+        telaJogo = new QWidget();
 
-    QVBoxLayout *layout =
-        new QVBoxLayout(telaJogo);
+        QVBoxLayout *layout =
+            new QVBoxLayout(telaJogo);
 
-    // CUBO
+        //CUBO
 
-    cubo = new CuboWidget();
+        cubo = new CuboWidget();
 
-    cubo->setFocusPolicy(Qt::StrongFocus);
+        cubo->setFocusPolicy(Qt::StrongFocus);
 
-    labelSeedInfo = new QLabel();
-    labelSeedInfo->setAlignment(Qt::AlignCenter);
+        labelSeedInfo = new QLabel();
+        labelSeedInfo->setAlignment(Qt::AlignCenter);
 
-    QLabel *labelMovimentos =
-    new QLabel("Movimentos: 0");
+        QLabel *labelMovimentos =
+        new QLabel("Movimentos: 0");
 
-    labelMovimentos->setAlignment(Qt::AlignCenter);
+        labelMovimentos->setAlignment(Qt::AlignCenter);
 
-    cubo->setLabelMovimentos(labelMovimentos);
+        cubo->setLabelMovimentos(labelMovimentos);
 
-    QLabel *labelStatus =
-    new QLabel("Cubo não resolvido");
+        QLabel *labelStatus =
+        new QLabel("Cubo não resolvido");
 
-    labelStatus->setAlignment(Qt::AlignCenter);
+        labelStatus->setAlignment(Qt::AlignCenter);
 
-    cubo->setLabelStatus(labelStatus);
+        cubo->setLabelStatus(labelStatus);
 
-    // CONTROLES DO JOGO
+        //CONTROLES DO JOGO
 
-    QPushButton *botaoGerarSeed =
-        new QPushButton("Gerar Nova Seed (Trocar)");
+        QPushButton *botaoGerarSeed =
+            new QPushButton("Gerar Nova Seed (Trocar)");
 
-    QPushButton *botaoEmbaralhar =
-        new QPushButton("Reiniciar com a Seed Atual");
+        QPushButton *botaoEmbaralhar =
+            new QPushButton("Reiniciar com a Seed Atual");
 
-    botaoGerarSeed->setObjectName("botaoControle");
-    botaoEmbaralhar->setObjectName("botaoControle");
+        botaoGerarSeed->setObjectName("botaoControle");
+        botaoEmbaralhar->setObjectName("botaoControle");
 
-    QHBoxLayout *barraControles =
-        new QHBoxLayout();
+        QHBoxLayout *barraControles =
+            new QHBoxLayout();
 
-    barraControles->addStretch();
+        barraControles->addStretch();
 
-    barraControles->addWidget(botaoGerarSeed);
-    barraControles->addWidget(botaoEmbaralhar);
+        barraControles->addWidget(botaoGerarSeed);
+        barraControles->addWidget(botaoEmbaralhar);
 
-    barraControles->addStretch();
+        barraControles->addStretch();
 
-    // BARRA INFERIOR
+        //BARRA INFERIOR
 
-    QPushButton *botaoVoltar =
-        new QPushButton("Voltar");
+        QPushButton *botaoVoltar =
+            new QPushButton("Voltar");
 
-    QPushButton *botaoInstrucoes =
-        new QPushButton("Instruções");
+        QPushButton *botaoInstrucoes =
+            new QPushButton("Instruções");
 
-    botaoVoltar->setObjectName("botaoSecundario");
-    botaoInstrucoes->setObjectName("botaoPrincipal");
+        botaoVoltar->setObjectName("botaoSecundario");
+        botaoInstrucoes->setObjectName("botaoPrincipal");
 
-    QHBoxLayout *barraInferior =
-        new QHBoxLayout();
+        QHBoxLayout *barraInferior =
+            new QHBoxLayout();
 
-    barraInferior->addWidget(botaoVoltar);
+        barraInferior->addWidget(botaoVoltar);
 
-    barraInferior->addStretch();
+        barraInferior->addStretch();
 
-    barraInferior->addWidget(botaoInstrucoes);
+        barraInferior->addWidget(botaoInstrucoes);
 
-    // =========================
-    // MONTA A TELA
-    // =========================
+        //monta a tela
 
-    layout->addWidget(cubo, 1);
+        layout->addWidget(cubo, 1);
 
-    layout->addWidget(labelSeedInfo);
-    layout->addLayout(barraControles);
-    layout->addWidget(labelMovimentos);
-    layout->addWidget(labelStatus);
+        layout->addWidget(labelSeedInfo);
+        layout->addLayout(barraControles);
+        layout->addWidget(labelMovimentos);
+        layout->addWidget(labelStatus);
 
-    layout->addLayout(barraInferior);
+        layout->addLayout(barraInferior);
 
-    telas->addWidget(telaJogo);
+        telas->addWidget(telaJogo);
 
-    // =========================
-    // BOTÕES
-    // =========================
+        connect(
+            botaoVoltar,
+            &QPushButton::clicked,
+            this,
+            [this]()
+            {
+                telas->setCurrentWidget(menuPrincipal);
+            }
+        );
 
-    connect(
-        botaoVoltar,
-        &QPushButton::clicked,
-        this,
-        [this]()
-        {
-            telas->setCurrentWidget(menuPrincipal);
-        }
-    );
-
-    connect(
-        botaoInstrucoes,
-        &QPushButton::clicked,
-        this,
-        [this]()
-        {
-            mostrarInstrucoes();
-        }
-    );
+        connect(
+            botaoInstrucoes,
+            &QPushButton::clicked,
+            this,
+            [this]()
+            {
+                mostrarInstrucoes();
+            }
+        );
 
 
-    seedAtual = static_cast<unsigned int>(time(nullptr));
-    cubo->embaralharComSeed(seedAtual);
-    labelSeedInfo->setText(QString("Seed atual: %1").arg(seedAtual));
+        seedAtual = static_cast<unsigned int>(time(nullptr));
+        cubo->embaralharComSeed(seedAtual);
+        //guarda exatamente o cubo original gerado pela seed
+        estadoOriginalSeed = cubo->getEstadoAtual();
+        labelSeedInfo->setText(QString("Seed atual: %1").arg(seedAtual));
 
-    connect(
-        botaoGerarSeed,
-        &QPushButton::clicked,
-        this,
-        [this]()
-        {
-            unsigned int novaSeed;
-            do {
-                novaSeed = QRandomGenerator::global()->generate();
-            } while (novaSeed == seedAtual);
-            seedAtual = novaSeed;
-            cubo->embaralharComSeed(seedAtual);
-            labelSeedInfo->setText(QString("Seed atual: %1").arg(seedAtual));
-            cubo->setFocus();
-        }
-    );
+        connect(
+            botaoGerarSeed,
+            &QPushButton::clicked,
+            this,
+            [this]()
+            {
+                unsigned int novaSeed;
+                do {
+                    novaSeed = QRandomGenerator::global()->generate();
+                } while (novaSeed == seedAtual);
+                seedAtual = novaSeed;
+                cubo->embaralharComSeed(seedAtual);
+                //configuração-base das buscas.
+                estadoOriginalSeed = cubo->getEstadoAtual();
+                labelSeedInfo->setText(QString("Seed atual: %1").arg(seedAtual));
+                cubo->setFocus();
+            }
+        );
 
-    connect(
-        botaoEmbaralhar,
-        &QPushButton::clicked,
-        this,
-        [this]()
-        {
-            cubo->embaralharComSeed(seedAtual);
-            cubo->setFocus();
-        }
-    );
-}
+        connect(
+            botaoEmbaralhar,
+            &QPushButton::clicked,
+            this,
+            [this]()
+            {
+                cubo->embaralharComSeed(seedAtual);
+                cubo->setFocus();
+            }
+        );
+    }
 
     void iniciarBuscaLargura(QPushButton *botao)
     {
-        ThreadBuscaLargura *busca = new ThreadBuscaLargura(cubo->getEstadoAtual(), this);
+        ThreadBuscaLargura *busca = new ThreadBuscaLargura(estadoOriginalSeed, this);
         QProgressDialog *progresso = new QProgressDialog(
-            "Buscando a solução do cubo atual...", "Cancelar", 0, 0, this);
+            "Buscando a solução do cubo em seu estado INICIAL...", "Cancelar", 0, 0, this);
         progresso->setWindowTitle("Busca em largura");
         progresso->setWindowModality(Qt::WindowModal);
         progresso->setMinimumDuration(0);
@@ -890,8 +895,14 @@ private:
             }
             else {
                 const ResultadoBusca &resultado = busca->resultado;
-                texto = QString("Estados visitados (incluindo o objetivo, se encontrado): %1\n\n")
-                    .arg(static_cast<qulonglong>(resultado.estadosVisitados));
+                
+                texto = QString(
+                    "Estados visitados (incluindo o objetivo, se encontrado):\n"
+                    "%1\n\n"
+                    "Seed atual: %2\n\n")
+                    .arg(static_cast<qulonglong>(
+                        resultado.estadosVisitados))
+                    .arg(seedAtual);
 
                 if (!resultado.encontrou) {
                     texto += "Sem solução.";
@@ -901,9 +912,9 @@ private:
                 }
                 else {
                     texto += QString("Solução em %1 movimentos.\n"
-                                     "Na tela do jogo, execute as teclas nesta ordem.\n"
+                                     "Na tela do jogo, APÓS REINICIAR O CUBO COM A SEED ATUAL, execute as teclas nesta ordem para validar.\n"
                                      "Os sentidos são vistos de frente para a face girada.\n\n")
-                        .arg(static_cast<qulonglong>(resultado.passos.size()));
+                                    .arg(static_cast<qulonglong>(resultado.passos.size()));
                     for (std::size_t i = 0; i < resultado.passos.size(); i++) {
                         QString tecla = QString::fromStdString(resultado.passos[i]);
                         QString descricao;
@@ -939,7 +950,7 @@ private:
     {
         ThreadBuscaProfundidade *busca =
             new ThreadBuscaProfundidade(
-                cubo->getEstadoAtual(),
+               estadoOriginalSeed,
                 10,
                 this);
 
@@ -1026,30 +1037,66 @@ private:
                     }
                     else
                     {
-                        texto += QString(
-                            "Solução encontrada no limite: %1\n"
-                            "Solução em %2 movimentos.\n\n"
-                            "Sequência:\n")
-                            .arg(
-                                static_cast<qulonglong>(
-                                    resultado.limiteEncontrado))
-                            .arg(
-                                static_cast<qulonglong>(
-                                    resultado.passos.size()));
+                        texto = QString("Seed atual: %1\n\n"
+                            "Estados visitados (incluindo o objetivo, se encontrado):\n"
+                            "%2\n\n"
+                            "Limite máximo configurado: %3\n"
+                            "Solução encontrada no limite: %4\n\n"
+                            "Solução em %5 movimentos.\n"
+                            "Na tela do jogo, APÓS REINICIAR O CUBO COM A SEED ATUAL, execute as teclas nesta ordem para validar.\n"
+                            "Os sentidos são vistos de frente para a face girada.\n\n")
+                            .arg(seedAtual)
+                            .arg(static_cast<qulonglong>(
+                                resultado.estadosVisitados))
+                            .arg(static_cast<qulonglong>(
+                                busca->limiteMaximo))
+                            .arg(static_cast<qulonglong>(
+                                resultado.limiteEncontrado))
+                            .arg(static_cast<qulonglong>(
+                                resultado.passos.size()));
 
-                        for (std::size_t i = 0;
-                            i < resultado.passos.size();
-                            i++)
+                        for (std::size_t i = 0;i < resultado.passos.size();i++)
                         {
-                            texto +=
+                            QString tecla =
                                 QString::fromStdString(
                                     resultado.passos[i]);
 
-                            if (i + 1 <
-                                resultado.passos.size())
-                            {
-                                texto += " ";
-                            }
+                            QString descricao;
+
+                            if (tecla == "U")
+                                descricao = "Superior — horário";
+                            else if (tecla == "I")
+                                descricao = "Superior — anti-horário";
+
+                            else if (tecla == "R")
+                                descricao = "Direita — horário";
+                            else if (tecla == "T")
+                                descricao = "Direita — anti-horário";
+
+                            else if (tecla == "F")
+                                descricao = "Frontal — horário";
+                            else if (tecla == "G")
+                                descricao = "Frontal — anti-horário";
+
+                            else if (tecla == "L")
+                                descricao = "Esquerda — horário";
+                            else if (tecla == "K")
+                                descricao = "Esquerda — anti-horário";
+
+                            else if (tecla == "B")
+                                descricao = "Inferior — horário";
+                            else if (tecla == "N")
+                                descricao = "Inferior — anti-horário";
+
+                            else if (tecla == "A")
+                                descricao = "Traseira — horário";
+                            else if (tecla == "S")
+                                descricao = "Traseira — anti-horário";
+
+                            texto += QString("%1. %2: %3\n")
+                                .arg(static_cast<qulonglong>(i + 1))
+                                .arg(tecla)
+                                .arg(descricao);
                         }
                     }
                 }
