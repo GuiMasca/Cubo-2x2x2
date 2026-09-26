@@ -130,6 +130,90 @@ inline bool avaliarEstado(
     return estado.isGoal();
 }
 
+inline std::size_t heuristica(const CubeState &estado)
+{
+    static const std::vector<std::vector<int>> resolvido = {
+        {0, 2, 4}, {0, 2, 5}, {0, 3, 4}, {0, 3, 5},
+        {1, 2, 4}, {1, 2, 5}, {1, 3, 4}, {1, 3, 5}
+    };
+
+    std::size_t quinasErradas = 0;
+
+    for (int i = 0; i < 8; i++)
+    {
+        if (estado.cornerColors[i] != resolvido[i])
+        {
+            quinasErradas++;
+        }
+    }
+
+    // Arredondamento para cima de quinasErradas / 4.
+    return (quinasErradas + 3) / 4;
+}
+
+struct NoAEstrela
+{
+    CubeState estado;
+    std::size_t f;
+};
+
+struct CompararNoAEstrela
+{
+    // std::priority_queue é um MAX-heap por padrão. Para virar um
+    // min-heap (menor f primeiro), invertemos a comparação.
+    bool operator()(const NoAEstrela &a, const NoAEstrela &b) const
+    {
+        return a.f > b.f;
+    }
+};
+
+struct EstruturaAEstrela
+{
+    bool (*cancelamentoSolicitado)() = nullptr;
+
+    std::priority_queue<NoAEstrela, std::vector<NoAEstrela>, CompararNoAEstrela> estados;
+
+    std::unordered_set<std::string> fechados;
+
+    void adicionar(const CubeState &estado)
+    {
+        std::string chave = estado.chave();
+
+        if (fechados.count(chave) > 0)
+        {
+            return;
+        }
+
+        std::size_t g = estado.path.size();
+        std::size_t h = heuristica(estado);
+
+        estados.push({estado, g + h});
+    }
+
+    CubeState remover()
+    {
+        NoAEstrela no = estados.top();
+        estados.pop();
+
+        fechados.insert(no.estado.chave());
+
+        return no.estado;
+    }
+
+    bool vazia()
+    {
+        while (!estados.empty() &&
+               fechados.count(estados.top().estado.chave()) > 0)
+        {
+            estados.pop();
+        }
+
+        return estados.empty() ||
+               (cancelamentoSolicitado != nullptr &&
+                cancelamentoSolicitado());
+    }
+};
+
 template <typename Estrutura>
 ResultadoBusca executarBusca(
     CubeState estadoInicial,
@@ -243,6 +327,20 @@ inline ResultadoBusca buscaProfundidadeIterativa(
     }
 
     return resultadoFinal;
+}
+
+inline ResultadoBusca buscaAEstrela(
+    const CubeState &estadoInicial,
+    bool (*cancelamentoSolicitado)() = nullptr)
+{
+    EstruturaAEstrela estrutura;
+
+    estrutura.cancelamentoSolicitado =
+        cancelamentoSolicitado;
+
+    return executarBusca(
+        estadoInicial,
+        estrutura);
 }
 
 #endif
