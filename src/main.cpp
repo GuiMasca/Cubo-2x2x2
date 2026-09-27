@@ -1,3 +1,6 @@
+#include <QElapsedTimer>
+#include <QTableWidget>
+#include <QHeaderView>
 #include <QApplication>
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
@@ -120,6 +123,66 @@ protected:
     {
         try {
             resultado = buscaAEstrela(estadoInicial, verificarCancelamento);
+        }
+        catch (const std::exception &excecao) {
+            erro = QString::fromUtf8(excecao.what());
+        }
+        cancelada = isInterruptionRequested();
+    }
+
+private:
+    static bool verificarCancelamento()
+    {
+        return QThread::currentThread()->isInterruptionRequested();
+    }
+};
+
+class ThreadComparacao : public QThread
+{
+public:
+    CubeState estadoInicial;
+    std::size_t limiteMaximo;
+
+    ResultadoBusca resBFS;
+    ResultadoBusca resIDDFS;
+    ResultadoBusca resAStar;
+
+    qint64 tempoBFS = 0;
+    qint64 tempoIDDFS = 0;
+    qint64 tempoAStar = 0;
+
+    QString erro;
+    bool cancelada = false;
+
+    ThreadComparacao(const CubeState &estado, std::size_t limite, QObject *parent = nullptr)
+        : QThread(parent), estadoInicial(estado), limiteMaximo(limite) {}
+
+protected:
+    void run() override
+    {
+        try {
+            QElapsedTimer timer;
+
+            // 1. Busca em Largura
+            timer.start();
+            resBFS = buscaLargura(estadoInicial, verificarCancelamento);
+            tempoBFS = timer.elapsed();
+
+            if (isInterruptionRequested()) { cancelada = true; return; }
+
+            // 2. Profundidade Limitada Iterativa
+            timer.restart();
+            resIDDFS = buscaProfundidadeIterativa(estadoInicial, limiteMaximo, verificarCancelamento);
+            tempoIDDFS = timer.elapsed();
+
+            if (isInterruptionRequested()) { cancelada = true; return; }
+
+            // 3. Busca A*
+            timer.restart();
+            resAStar = buscaAEstrela(estadoInicial, verificarCancelamento);
+            tempoAStar = timer.elapsed();
+
+            if (isInterruptionRequested()) { cancelada = true; return; }
         }
         catch (const std::exception &excecao) {
             erro = QString::fromUtf8(excecao.what());
@@ -691,11 +754,16 @@ public:
         QPushButton *botaoBuscas =
             new QPushButton("BUSCAS");
 
+        QPushButton *botaoSair =
+            new QPushButton("SAIR");
+
         botaoJogar->setObjectName("botaoPrincipal");
         botaoBuscas->setObjectName("botaoPrincipal");
+        botaoSair->setObjectName("botaoSecundario");
 
         botaoJogar->setFixedWidth(300);
         botaoBuscas->setFixedWidth(300);
+        botaoSair->setFixedWidth(300);
 
         layout->addStretch();
 
@@ -713,6 +781,14 @@ public:
 
         layout->addWidget(
             botaoBuscas,
+            0,
+            Qt::AlignCenter
+        );
+
+        layout->addSpacing(15);
+
+        layout->addWidget(
+            botaoSair,
             0,
             Qt::AlignCenter
         );
@@ -740,6 +816,13 @@ public:
             {
                 telas->setCurrentWidget(menuBuscas);
             }
+        );
+
+        connect(
+            botaoSair,
+            &QPushButton::clicked,
+            this,
+            &QWidget::close
         );
     }
 
@@ -1236,6 +1319,76 @@ public:
     busca->start();
     }
 
+
+    void iniciarComparacao(QPushButton *botao)
+    {
+        ThreadComparacao *busca = new ThreadComparacao(estadoOriginalSeed, 10, this);
+        QProgressDialog *progresso = new QProgressDialog(
+            "Executando as 3 buscas para comparação...", "Cancelar", 0, 0, this);
+        progresso->setWindowTitle("Comparação de Algoritmos");
+        progresso->setWindowModality(Qt::WindowModal);
+        progresso->setMinimumDuration(0);
+        progresso->setAutoClose(false);
+        progresso->setAutoReset(false);
+        botao->setEnabled(false);
+
+        connect(progresso, &QProgressDialog::canceled, busca, &QThread::requestInterruption);
+        connect(qApp, &QCoreApplication::aboutToQuit, busca, [busca]() {
+            busca->requestInterruption();
+            busca->wait();
+        });
+
+        connect(busca, &QThread::finished, this, [this, busca, progresso, botao]() {
+            progresso->hide();
+            progresso->deleteLater();
+            botao->setEnabled(true);
+
+            if (busca->cancelada) {
+                QMessageBox::information(this, "Comparação", "Busca de comparação cancelada.");
+            } else if (!busca->erro.isEmpty()) {
+                QMessageBox::critical(this, "Erro", "Ocorreu um erro:\n" + busca->erro);
+            } else {
+                QDialog dialog(this);
+                dialog.setWindowTitle("Resultado da Comparação");
+                dialog.resize(750, 400);
+
+                QVBoxLayout *layout = new QVBoxLayout(&dialog);
+
+                QLabel *lblInfo = new QLabel(QString("<b>Seed Atual:</b> %1").arg(seedAtual));
+                lblInfo->setAlignment(Qt::AlignCenter);
+                layout->addWidget(lblInfo);
+
+                QTableWidget *tabela = new QTableWidget(3, 4, &dialog);
+                tabela->setHorizontalHeaderLabels({"Algoritmo", "Passos (Movimentos)", "Estados Visitados", "Tempo"});
+                tabela->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+                auto preencherLinha = [&](int linha, QString nome, const ResultadoBusca &res, qint64 tempo) {
+                    tabela->setItem(linha, 0, new QTableWidgetItem(nome));
+                    tabela->setItem(linha, 1, new QTableWidgetItem(res.encontrou ? QString::number(res.passos.size()) : "N/A"));
+                    tabela->setItem(linha, 2, new QTableWidgetItem(QString::number(res.estadosVisitados)));
+                    tabela->setItem(linha, 3, new QTableWidgetItem(QString::number(tempo) + " ms"));
+                };
+
+                preencherLinha(0, "Busca em Largura (BFS)", busca->resBFS, busca->tempoBFS);
+                preencherLinha(1, "Profundidade Iterativa (IDDFS)", busca->resIDDFS, busca->tempoIDDFS);
+                preencherLinha(2, "Busca A*", busca->resAStar, busca->tempoAStar);
+
+                layout->addWidget(tabela);
+
+                QPushButton *btnFechar = new QPushButton("Fechar", &dialog);
+                btnFechar->setObjectName("botaoPrincipal");
+                connect(btnFechar, &QPushButton::clicked, &dialog, &QDialog::accept);
+                layout->addWidget(btnFechar);
+
+                dialog.exec();
+            }
+            busca->deleteLater();
+        });
+
+        progresso->show();
+        busca->start();
+    }
+
     void criarMenuBuscas()
     {
         menuBuscas = new QWidget();
@@ -1277,6 +1430,10 @@ public:
 
         QPushButton *comparacao =
             new QPushButton("Comparação");
+
+        connect(comparacao, &QPushButton::clicked, this, [this, comparacao]() {
+            iniciarComparacao(comparacao);
+        });
 
         QPushButton *voltar =
             new QPushButton("Voltar");
