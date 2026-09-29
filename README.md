@@ -19,17 +19,29 @@ Projeto desenvolvido em **C++17**, **Qt 6** e **OpenGL** para simular um Cubo M�
 Os movimentos são feitos pelo teclado.
 
 | Tecla | Movimento|
+
 | `U` | Face superior — sentido horário|
+
 | `I` | Face superior — sentido anti-horário|
+
 | `R` | Face direita — sentido horário|
+
 | `T` | Face direita — sentido anti-horário|
+
 | `F` | Face frontal — sentido horário|
+
 | `G` | Face frontal — sentido anti-horário|
+
 | `L` | Face esquerda — sentido horário |
+
 | `K` | Face esquerda — sentido anti-horário|
+
 | `B` | Face inferior — sentido horário|
+
 | `N` | Face inferior — sentido anti-horário|
+
 | `A` | Face traseira — sentido horário|
+
 | `S` | Face traseira — sentido anti-horário|
 
 Os sentidos horário e anti-horário são considerados olhando diretamente para a face que está sendo girada.
@@ -39,10 +51,15 @@ Os sentidos horário e anti-horário são considerados olhando diretamente para 
 Cada movimento possui sua operação inversa:
 
 U ↔ I
+
 R ↔ T
+
 F ↔ G
+
 L ↔ K
+
 B ↔ N
+
 A ↔ S
 
 ## Tecnologias
