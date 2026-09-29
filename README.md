@@ -1,80 +1,61 @@
-# Cubo-2x2x2
-Repositóro dedicado ao projeto cubo 2x2x2 em C++
+# Cubo Mágico 2x2x2 com Inteligência Artificial
 
-## Linux
+Projeto desenvolvido em **C++17**, **Qt 6** e **OpenGL** para simular um Cubo Mágico 2x2x2 e resolvê-lo usando algoritmos de busca.
 
-Requer CMake, Make, compilador C++ e Qt6 com Widgets e OpenGL.
-Antes de compilar, salve os arquivos no editor: a compilação usa o conteúdo salvo no disco.
+## Funcionalidades
 
-Na primeira vez, execute a partir da pasta principal do projeto (onde está o `CMakeLists.txt`):
+- Cubo 2x2x2 em 3D
+- Movimentação manual pelo teclado
+- Embaralhamento por seed
+- Verificação automática de cubo resolvido
+- Busca em Largura
+- Busca em Profundidade Limitada Iterativa
+- Busca A*
+- Exibição da quantidade de estados visitados
+- Exibição da sequência de movimentos da solução
 
-```bash
-cmake -S . -B build
-cmake --build build --parallel 2 && ./build/meucubo
-```
+## Controles do cubo
 
-Depois de alterar o código, se já estiver na pasta `build`:
+Os movimentos são feitos pelo teclado.
 
-```bash
-make -j2 && ./meucubo
-```
+| Tecla | Movimento|
+| `U` | Face superior — sentido horário|
+| `I` | Face superior — sentido anti-horário|
+| `R` | Face direita — sentido horário|
+| `T` | Face direita — sentido anti-horário|
+| `F` | Face frontal — sentido horário|
+| `G` | Face frontal — sentido anti-horário|
+| `L` | Face esquerda — sentido horário |
+| `K` | Face esquerda — sentido anti-horário|
+| `B` | Face inferior — sentido horário|
+| `N` | Face inferior — sentido anti-horário|
+| `A` | Face traseira — sentido horário|
+| `S` | Face traseira — sentido anti-horário|
 
-O comando acima usa o Makefile gerado pelo CMake. A configuração atual do Linux
-usa `Unix Makefiles`. A alternativa abaixo também funciona com outros geradores do CMake:
+Os sentidos horário e anti-horário são considerados olhando diretamente para a face que está sendo girada.
 
-```bash
-cmake --build . --parallel 2 && ./meucubo
-```
+### Pares de movimentos
 
-O `&&` abre o programa somente se a compilação terminar com sucesso.
-Se executar apenas `./meucubo`, será aberto o último executável compilado,
-sem incorporar alterações feitas depois da compilação.
+Cada movimento possui sua operação inversa:
 
-Se precisar recompilar tudo, ainda dentro de `build`:
+U ↔ I
+R ↔ T
+F ↔ G
+L ↔ K
+B ↔ N
+A ↔ S
 
-```bash
-cmake --build . --clean-first --parallel 2 && ./meucubo
-```
+## Tecnologias
 
-Se o Makefile ainda não existir, configure primeiro, dentro de `build`:
+- C++17
+- Qt 6
+- OpenGL
+- CMake
 
-```bash
-cmake -S .. -B .
-make -j2 && ./meucubo
-```
+## Como compilar
 
-Use sempre a mesma pasta de compilação (`build`) para evitar abrir um executável
-antigo de outra pasta. Sem alterações no código, basta executar `./meucubo`.
+Na pasta principal do projeto:
 
-## Windows
-
-Como rodar o Projeto:
-    Rodamos no terminal:
-        cd build
-        cmake --build .
-        .\meucubo.exe
-
-Quando trocar de computador, faça:
-Remove-Item -Recurse -Force build
-mkdir build
-cd build
-
-e depois configura dnv:
-& "C:\Qt\Tools\CMake_64\bin\cmake.exe" ..
-
-QUANDO RODAR O .EXE, observa o cubo na exata posição em que ele abriu (a face da frente é a vermelha):
-COMANDOS - 
-A roda a face ATRÁS
-F roda a face da FRENTE
-U roda a face de CIMA
-B roda a face de BAIXO
-R roda a face da DIREITA
-L roda a face da ESQUERDA
-
-PARA RODAR NO ANTI - HORÁRIO:
-A (atrás) anti-horário é S
-F (frente) anti-horário é G
-B (de baixo) anti-horário é N
-U (de cima) anti-horário é I
-R (direita) anti-horário é T
-L (esquerda) anti-horário é K
+```powershell
+cmake -S . -B build -G Ninja -DCMAKE_PREFIX_PATH="C:/Qt/6.11.2/mingw_64"
+cmake --build build
